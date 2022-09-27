@@ -10,10 +10,36 @@ import {
   Group,
   Button,
 } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthProvider';
 
 export function Login() {
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const form = useForm({
+    initialValues: {
+      email: '',
+      name: '',
+      password: '',
+      terms: true,
+    },
+
+    validate: {
+      email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
+      password: (val) => (val.length <= 6 ? 'Password should include at least 6 characters' : null),
+    },
+  });
+
+  const handleLogin = async () => {
+    try {
+        await login(form.values.email, form.values.password);
+        alert("You have successfully logged in!");
+        navigate("/");
+    } catch (err) {
+        alert(err);
+    }
+  };
   
   return (
     <Container size={420} my={40}>
@@ -31,17 +57,33 @@ export function Login() {
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <TextInput label="Email" placeholder="you@mantine.dev" required />
-        <PasswordInput label="Password" placeholder="Your password" required mt="md" />
-        <Group position="apart" mt="md">
-          <Checkbox label="Remember me" />
-          <Anchor<'a'> onClick={(event) => event.preventDefault()} href="#" size="sm">
-            Forgot password?
-          </Anchor>
-        </Group>
-        <Button fullWidth mt="xl">
-          Sign in
-        </Button>
+        <form onSubmit={form.onSubmit(handleLogin)}>
+          <TextInput
+            required
+            label="Email"
+            placeholder="hello@mantine.dev"
+            value={form.values['email']}
+            onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
+            error={form.errors['email'] && 'Invalid email'}
+          />
+          <PasswordInput
+            required
+            label="Password"
+            placeholder="Your password"
+            value={form.values['password']}
+            onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
+            error={form.errors['password'] && 'Password should include at least 6 characters'}
+          />
+          <Group position="apart" mt="md">
+            <Checkbox label="Remember me" />
+            <Anchor<'a'> onClick={(event) => event.preventDefault()} href="#" size="sm">
+              Forgot password?
+            </Anchor>
+          </Group>
+          <Button fullWidth mt="xl" type="submit">
+            Sign in
+          </Button>
+        </form>
       </Paper>
     </Container>
   );
