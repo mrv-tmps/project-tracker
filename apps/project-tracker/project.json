@@ -1,0 +1,83 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/project-tracker/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/project-tracker",
+        "index": "apps/project-tracker/src/index.html",
+        "baseHref": "/",
+        "main": "apps/project-tracker/src/main.tsx",
+        "polyfills": "apps/project-tracker/src/polyfills.ts",
+        "tsConfig": "apps/project-tracker/tsconfig.app.json",
+        "assets": [
+          "apps/project-tracker/src/favicon.ico",
+          "apps/project-tracker/src/assets"
+        ],
+        "styles": [],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/project-tracker/src/environments/environment.ts",
+              "with": "apps/project-tracker/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/webpack:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "project-tracker:build",
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "project-tracker:build:development"
+        },
+        "production": {
+          "buildTarget": "project-tracker:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/project-tracker/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/project-tracker"],
+      "options": {
+        "jestConfig": "apps/project-tracker/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
