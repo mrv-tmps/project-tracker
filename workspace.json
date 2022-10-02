@@ -3,7 +3,7 @@
   "version": 2,
   "projects": {
     "api": "apps/api",
-    "project-tracker": "apps/project-tracker",
-    "project-tracker-e2e": "apps/project-tracker-e2e"
+    "web": "apps/web",
+    "web-e2e": "apps/web-e2e"
   }
 }
