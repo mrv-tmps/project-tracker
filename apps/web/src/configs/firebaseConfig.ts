@@ -1,15 +1,10 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-
 const firebaseConfig = {
-  apiKey: 'AIzaSyDZIFh77TZXsTUkWtu_PeEKfyGUc5h8lGs',
-  appId: '1:262074458915:web:12e6fdfa95f3ced9f92296',
-  authDomain: 'project-tracker-991ec.firebaseapp.com',
-  messagingSenderId: '262074458915',
-  projectId: 'project-tracker-991ec',
-  storageBucket: 'project-tracker-991ec.appspot.com'
+  apiKey: process.env['NX_FIREBASE_API_KEY'],
+  appId: process.env['NX_FIREBASE_APP_ID'],
+  authDomain: process.env['NX_FIREBASE_AUTH_DOMAIN'],
+  messagingSenderId: process.env['NX_FIREBASE_API_MESSAGING_SENDER_ID'],
+  projectId: process.env['NX_FIREBASE_PROJECT_ID'],
+  storageBucket: process.env['NX_FIREBASE_API_STORAGE_BUCKET'],
 };
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+export default firebaseConfig;

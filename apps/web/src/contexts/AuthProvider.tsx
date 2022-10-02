@@ -1,88 +1,65 @@
-import {
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-  UserCredential
-} from 'firebase/auth';
 import { ReactNode, useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
-import { auth } from '../configs/firebaseConfig';
+import { User, UserContextType } from '../types/User';
 import { createGenericContext } from '../utils/Context';
-
-type UserContextType = {
-  login: (email: string, password: string) => Promise<UserCredential>,
-  loginWithGoogle: () => Promise<UserCredential>,
-  logout: () => Promise<void>,
-  register: (email: string, password: string) => Promise<UserCredential>,
-  reset: (email: string) => Promise<void>,
-  user: User | null,
-}
+import { auth } from '../utils/Firebase';
 interface Props {
   children: ReactNode;
-}
-
-type User = {
-  displayName: string | null,
-  email: string | null,
-  uid: string,
 }
 
 const [useAuth, AuthContextProvider] = createGenericContext<UserContextType>();
 
 const AuthProvider = (props: Props) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const provider = new GoogleAuthProvider();
+  const [firebaseUserDetails, loadingFirebaseUserDetails] = useAuthState(auth);
+  const [userDetails, setUserDetails] = useState<User | null>(null);
+  const [loadingUserDetails, setLoadingUserDetails] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser({
-          displayName: user.displayName,
-          email: user.email,
-          uid: user.uid,
+    if (loadingFirebaseUserDetails) {
+      return;
+    }
+
+    async function getUserProfileDetails() {
+      setLoadingUserDetails(true);
+
+      if (firebaseUserDetails) {
+        setUserDetails({
+          displayName: firebaseUserDetails.displayName,
+          email: firebaseUserDetails.email,
+          uid: firebaseUserDetails.uid,
         });
+        /*
+         * const userApi = ApiClient.use(UserApi);
+         * try {
+         *   const { data } = await userApi.userControllerGetProfileDetailsByFirebaseId(firebaseUserDetails.uid);
+         * } catch (error) {
+         *   alert('An error occurred while getting your account details. Please reload the page to try again.');
+         * }
+         */
       } else {
-        setUser(null);
+        setUserDetails(null);
       }
 
-      setLoading(false);
-    });
+      setLoadingUserDetails(false);
+    }
 
-    return () => unsubscribe();
-  }, []);
+    getUserProfileDetails();
+  }, [firebaseUserDetails, loadingFirebaseUserDetails]);
 
-  const register = (email: string, password: string) => createUserWithEmailAndPassword(auth, email, password);
-
-  const login = (email: string, password: string) => signInWithEmailAndPassword(auth, email, password);
-
-  const loginWithGoogle = () => signInWithPopup(auth, provider);
-
-  const reset = (email: string) => sendPasswordResetEmail(auth, email);
-
-  const logout = async () => {
-    setUser(null);
-    await signOut(auth);
-  };
-
-  function getValues() {
+  function getValues(): UserContextType {
     return {
-      login,
-      loginWithGoogle,
-      logout,
-      register,
-      reset,
-      user
+      firebaseUserDetails,
+      loadingFirebaseUserDetails,
+      loadingUserDetails,
+      setUserDetails,
+      userDetails
     };
   }
 
   return (
     <AuthContextProvider value={getValues()}>
-      {loading ? null : props.children}
+      {props.children}
     </AuthContextProvider>
   );
 };
