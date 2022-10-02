@@ -7,21 +7,19 @@ import {
   Text,
   Container,
   Button,
-  Notification,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+
+import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons';
-import { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
 import { MINIMUM_PASSWORD_LENGTH } from '../../constants/Password';
-
 import { registerWithEmailAndPassword } from '../../utils/Firebase';
 
 function Registration() {
   const navigate = useNavigate();
-  const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const form = useForm({
     initialValues: {
       email: '',
@@ -36,20 +34,19 @@ function Registration() {
     },
   });
 
-  const renderAlert = isRegistered &&
-  <Notification color="teal" icon={<IconCheck size={18} />} title="Success">
-    You have successfully signed up!
-  </Notification>;
-
   const handleRegister = async () => {
     await registerWithEmailAndPassword(form.values.email, form.values.password);
-    setIsRegistered(true);
+    showNotification({
+      color: 'teal',
+      icon: <IconCheck />,
+      message: 'You have successfully signed up!',
+      title: 'Success',
+    });
     navigate('/login');
   };
 
   return (
     <Container my={40} size={420}>
-      {renderAlert}
       <Title
         align="center"
         sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
