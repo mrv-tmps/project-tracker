@@ -7,14 +7,21 @@ import {
   Text,
   Container,
   Button,
+  Notification,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { IconCheck } from '@tabler/icons';
+import { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthProvider';
+
+import { MINIMUM_PASSWORD_LENGTH } from '../../constants/Password';
+
+import { registerWithEmailAndPassword } from '../../utils/Firebase';
 
 function Registration() {
-  const { register } = useAuth();
   const navigate = useNavigate();
+  const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const form = useForm({
     initialValues: {
       email: '',
@@ -25,52 +32,54 @@ function Registration() {
 
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
-      password: (val) => (val.length <= 6 ? 'Password should include at least 6 characters' : null),
+      password: (val) => (val.length <= MINIMUM_PASSWORD_LENGTH ? 'Password should include at least 6 characters' : null),
     },
   });
 
+  const renderAlert = isRegistered &&
+  <Notification color="teal" icon={<IconCheck size={18} />} title="Success">
+    You have successfully signed up!
+  </Notification>;
+
   const handleRegister = async () => {
-    try {
-        await register(form.values.email, form.values.password);
-        alert("You have successfully signed up!");
-        navigate("/login");
-    } catch (err) {
-        alert(err);
-    }
+    await registerWithEmailAndPassword(form.values.email, form.values.password);
+    setIsRegistered(true);
+    navigate('/login');
   };
 
   return (
-    <Container size={420} my={40}>
+    <Container my={40} size={420}>
+      {renderAlert}
       <Title
         align="center"
         sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
       >
         Create Account
       </Title>
-      <Text color="dimmed" size="sm" align="center" mt={5}>
+      <Text align="center" color="dimmed" mt={5} size="sm">
         Already have an account?{' '}
         <Anchor<'a'> size="sm" onClick={() => navigate('/login')}>
           Sign in
         </Anchor>
       </Text>
 
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+      <Paper withBorder mt={30} p={30} radius="md" shadow="md">
         <form onSubmit={form.onSubmit(handleRegister)}>
           <TextInput
             required
+            error={form.errors['email'] && 'Invalid email'}
             label="Email"
             placeholder="hello@mantine.dev"
             value={form.values['email']}
             onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
-            error={form.errors['email'] && 'Invalid email'}
           />
           <PasswordInput
             required
+            error={form.errors['password'] && 'Password should include at least 6 characters'}
             label="Password"
             placeholder="Your password"
             value={form.values['password']}
             onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
-            error={form.errors['password'] && 'Password should include at least 6 characters'}
           />
           <Button fullWidth mt="xl" type="submit">
             Sign up
@@ -81,4 +90,4 @@ function Registration() {
   );
 }
 
-export default Registration
+export default Registration;
