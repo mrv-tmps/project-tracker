@@ -9,12 +9,10 @@ import {
   Container,
   Group,
   Button,
-  Notification,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons';
-import { useState } from 'react';
-
 import { useNavigate } from 'react-router-dom';
 
 import { MINIMUM_PASSWORD_LENGTH } from '../../constants/Password';
@@ -23,7 +21,6 @@ import { signInWithEmailPassword } from '../../utils/Firebase';
 
 export function Login() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const form = useForm({
     initialValues: {
       email: '',
@@ -38,20 +35,19 @@ export function Login() {
     },
   });
 
-  const renderAlert = isLoggedIn &&
-  <Notification color="teal" icon={<IconCheck size={18} />} title="Success">
-    'You have successfully logged in!'
-  </Notification>;
-
   const handleLogin = async () => {
     await signInWithEmailPassword(form.values.email, form.values.password);
-    setIsLoggedIn(true);
+    showNotification({
+      color: 'teal',
+      icon: <IconCheck />,
+      message: 'You have successfully logged in!',
+      title: 'Success',
+    });
     navigate('/');
   };
 
   return (
     <Container my={40} size={420}>
-      {renderAlert}
       <Title
         align="center"
         sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}

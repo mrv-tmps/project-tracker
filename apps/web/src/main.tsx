@@ -1,5 +1,6 @@
 import { MantineProvider } from '@mantine/core';
-import React, { StrictMode } from 'react';
+import { NotificationsProvider } from '@mantine/notifications';
+import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 
 import App from './app/app';
@@ -12,7 +13,9 @@ root.render(
   <StrictMode>
     <AuthProvider>
       <MantineProvider withGlobalStyles withNormalizeCSS>
-        <App />
+        <NotificationsProvider>
+          <App />
+        </NotificationsProvider>
       </MantineProvider>
     </AuthProvider>
   </StrictMode>
