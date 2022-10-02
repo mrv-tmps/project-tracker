@@ -9,14 +9,21 @@ import {
   Container,
   Group,
   Button,
+  Notification,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { IconCheck } from '@tabler/icons';
+import { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthProvider';
+
+import { MINIMUM_PASSWORD_LENGTH } from '../../constants/Password';
+
+import { signInWithEmailPassword } from '../../utils/Firebase';
 
 export function Login() {
-  const { login } = useAuth();
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const form = useForm({
     initialValues: {
       email: '',
@@ -27,56 +34,58 @@ export function Login() {
 
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
-      password: (val) => (val.length <= 6 ? 'Password should include at least 6 characters' : null),
+      password: (val) => (val.length <= MINIMUM_PASSWORD_LENGTH ? 'Password should include at least 6 characters' : null),
     },
   });
 
+  const renderAlert = isLoggedIn &&
+  <Notification color="teal" icon={<IconCheck size={18} />} title="Success">
+    'You have successfully logged in!'
+  </Notification>;
+
   const handleLogin = async () => {
-    try {
-        await login(form.values.email, form.values.password);
-        alert("You have successfully logged in!");
-        navigate("/");
-    } catch (err) {
-        alert(err);
-    }
+    await signInWithEmailPassword(form.values.email, form.values.password);
+    setIsLoggedIn(true);
+    navigate('/');
   };
-  
+
   return (
-    <Container size={420} my={40}>
+    <Container my={40} size={420}>
+      {renderAlert}
       <Title
         align="center"
         sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
       >
         Welcome!
       </Title>
-      <Text color="dimmed" size="sm" align="center" mt={5}>
+      <Text align="center" color="dimmed" mt={5} size="sm">
         Do not have an account yet?{' '}
         <Anchor<'a'> size="sm" onClick={() => navigate('/registration')}>
           Create account
         </Anchor>
       </Text>
 
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+      <Paper withBorder mt={30} p={30} radius="md" shadow="md">
         <form onSubmit={form.onSubmit(handleLogin)}>
           <TextInput
             required
+            error={form.errors['email'] && 'Invalid email'}
             label="Email"
             placeholder="hello@mantine.dev"
             value={form.values['email']}
             onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
-            error={form.errors['email'] && 'Invalid email'}
           />
           <PasswordInput
             required
+            error={form.errors['password'] && 'Password should include at least 6 characters'}
             label="Password"
             placeholder="Your password"
             value={form.values['password']}
             onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
-            error={form.errors['password'] && 'Password should include at least 6 characters'}
           />
-          <Group position="apart" mt="md">
+          <Group mt="md" position="apart">
             <Checkbox label="Remember me" />
-            <Anchor<'a'> onClick={(event) => event.preventDefault()} href="#" size="sm">
+            <Anchor<'a'> href="#" size="sm" onClick={(event) => event.preventDefault()}>
               Forgot password?
             </Anchor>
           </Group>
@@ -89,4 +98,4 @@ export function Login() {
   );
 }
 
-export default Login
+export default Login;
