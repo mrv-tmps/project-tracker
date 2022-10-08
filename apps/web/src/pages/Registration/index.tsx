@@ -20,6 +20,8 @@ import routes from '../../constants/routes';
 import { useAuth } from '../../contexts/AuthProvider';
 import { registerWithEmailAndPassword } from '../../utils/Firebase';
 
+import * as S from '../styles';
+
 function Registration() {
   const { userDetails } = useAuth();
   const navigate = useNavigate();
@@ -53,44 +55,46 @@ function Registration() {
   }
 
   return (
-    <Container my={40} size={420}>
-      <Title
-        align="center"
-        sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
-      >
+    <S.PageContainer>
+      <Container py={150} size={420}>
+        <Title
+          align="center"
+          sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+        >
         Create Account
-      </Title>
-      <Text align="center" color="dimmed" mt={5} size="sm">
+        </Title>
+        <Text align="center" color="dimmed" mt={5} size="sm">
         Already have an account?{' '}
-        <Anchor<'a'> size="sm" onClick={() => navigate('/login')}>
+          <Anchor<'a'> size="sm" onClick={() => navigate('/login')}>
           Sign in
-        </Anchor>
-      </Text>
+          </Anchor>
+        </Text>
 
-      <Paper withBorder mt={30} p={30} radius="md" shadow="md">
-        <form onSubmit={form.onSubmit(handleRegister)}>
-          <TextInput
-            required
-            error={form.errors['email'] && 'Invalid email'}
-            label="Email"
-            placeholder="hello@mantine.dev"
-            value={form.values['email']}
-            onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
-          />
-          <PasswordInput
-            required
-            error={form.errors['password'] && 'Password should include at least 6 characters'}
-            label="Password"
-            placeholder="Your password"
-            value={form.values['password']}
-            onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
-          />
-          <Button fullWidth mt="xl" type="submit">
+        <Paper withBorder mt={30} p={30} radius="md" shadow="md">
+          <form onSubmit={form.onSubmit(handleRegister)}>
+            <TextInput
+              required
+              error={form.errors['email'] && 'Invalid email'}
+              label="Email"
+              placeholder="hello@mantine.dev"
+              value={form.values['email']}
+              onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
+            />
+            <PasswordInput
+              required
+              error={form.errors['password'] && 'Password should include at least 6 characters'}
+              label="Password"
+              placeholder="Your password"
+              value={form.values['password']}
+              onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
+            />
+            <Button fullWidth mt="xl" type="submit">
             Sign up
-          </Button>
-        </form>
-      </Paper>
-    </Container>
+            </Button>
+          </form>
+        </Paper>
+      </Container>
+    </S.PageContainer>
   );
 }
 

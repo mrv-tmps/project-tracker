@@ -1,4 +1,4 @@
-import { Button, Container, Group, Stack, Text } from '@mantine/core';
+import { Button, Group, Stack, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { fetchUserProjects } from '../../services/ProjectService';
 import { Project } from '../../types/Project';
 import { logout } from '../../utils/Firebase';
 
-import * as S from './styles';
+import * as S from '../styles';
 
 function Home() {
   const { userDetails } = useAuth();
@@ -69,10 +69,10 @@ function Home() {
   ));
 
   return (
-    <S.ProjectsPage>
+    <S.PageContainer>
       {renderLoading}
       <Group position="right">
-        <Button mt={20} onClick={handleLogout}>Logout</Button>
+        <Button color="red" m={10} onClick={handleLogout}>Logout</Button>
       </Group>
       <Group my={80} position="center">
         <Stack>
@@ -86,7 +86,7 @@ function Home() {
           </S.Column>
         </Stack>
       </Group>
-    </S.ProjectsPage>
+    </S.PageContainer>
   );
 }
 

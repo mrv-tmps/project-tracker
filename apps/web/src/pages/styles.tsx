@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ProjectsPage = styled.div`
+export const PageContainer = styled.div`
   width: 100%;
   height: 100%;
   background: linear-gradient(180deg, rgba(203, 231, 255, 0.59375) 25.52%, #FFFFFF 100%);
