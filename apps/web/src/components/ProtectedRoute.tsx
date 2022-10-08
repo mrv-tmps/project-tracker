@@ -12,12 +12,11 @@ type Props = {
 }
 
 export default function ProtectedRoute(props: Props) {
-  const { children, roles } = props;
+  const { children } = props;
   const {
     firebaseUserDetails,
     loadingFirebaseUserDetails,
     loadingUserDetails,
-    userDetails
   } = useAuth();
 
   if (loadingFirebaseUserDetails) {
@@ -30,10 +29,6 @@ export default function ProtectedRoute(props: Props) {
 
   if (loadingUserDetails) {
     return <CustomLoader />;
-  }
-
-  if (!(userDetails)) {
-    return <Navigate to={routes.FORBIDDEN_PAGE} />;
   }
 
   return children;

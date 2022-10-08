@@ -1,5 +1,5 @@
 enum Role {
-  PROJECT_MANAGER = 'project-manager',
+  PROJECT_MANAGER = 'project manager',
   DEV = 'developer',
 }
 

@@ -21,10 +21,7 @@ export function App() {
           } path="/" />
           <Route element={<Registration />} path="/registration" />
           <Route element={<Login />} path="/login" />
-          <Route
-            element={<ErrorPage />}
-            path="*"
-          />
+          <Route element={<ErrorPage />} path="/*" />
         </Routes>
       </BrowserRouter>
     </AppShell>
