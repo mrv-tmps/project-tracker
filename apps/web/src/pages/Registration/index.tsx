@@ -16,9 +16,12 @@ import { IconCheck } from '@tabler/icons';
 import { useNavigate } from 'react-router-dom';
 
 import { MINIMUM_PASSWORD_LENGTH } from '../../constants/Password';
+import routes from '../../constants/routes';
+import { useAuth } from '../../contexts/AuthProvider';
 import { registerWithEmailAndPassword } from '../../utils/Firebase';
 
 function Registration() {
+  const { userDetails } = useAuth();
   const navigate = useNavigate();
   const form = useForm({
     initialValues: {
@@ -44,6 +47,10 @@ function Registration() {
     });
     navigate('/login');
   };
+
+  if (userDetails) {
+    navigate(routes.HOME);
+  }
 
   return (
     <Container my={40} size={420}>

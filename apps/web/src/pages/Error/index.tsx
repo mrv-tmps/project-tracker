@@ -1,4 +1,7 @@
 import { createStyles, Title, Text, Button, Container, Group } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
+
+import routes from '../../constants/routes';
 
 const useStyles = createStyles((theme) => ({
   description: {
@@ -44,6 +47,11 @@ const useStyles = createStyles((theme) => ({
 
 export default function ErrorPage() {
   const { classes } = useStyles();
+  const navigate = useNavigate();
+
+  function handleRefresh() {
+    navigate(routes.HOME);
+  }
 
   return (
     <div className={classes.root}>
@@ -55,7 +63,7 @@ export default function ErrorPage() {
           already notified. Try refreshing the page.
         </Text>
         <Group position="center">
-          <Button size="md" variant="white">
+          <Button size="md" variant="white" onClick={handleRefresh}>
             Refresh the page
           </Button>
         </Group>
