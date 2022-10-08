@@ -11,20 +11,18 @@ import Registration from '../pages/Registration';
 
 export function App() {
   return (
-    <AppShell fixed padding="md">
-      <BrowserRouter>
-        <Routes>
-          <Route element={
-            <ProtectedRoute roles={[Role.PROJECT_MANAGER, Role.DEV]}>
-              <Home />
-            </ProtectedRoute>
-          } path="/" />
-          <Route element={<Registration />} path="/registration" />
-          <Route element={<Login />} path="/login" />
-          <Route element={<ErrorPage />} path="/*" />
-        </Routes>
-      </BrowserRouter>
-    </AppShell>
+    <BrowserRouter>
+      <Routes>
+        <Route element={
+          <ProtectedRoute roles={[Role.PROJECT_MANAGER, Role.DEV]}>
+            <Home />
+          </ProtectedRoute>
+        } path="/" />
+        <Route element={<Registration />} path="/registration" />
+        <Route element={<Login />} path="/login" />
+        <Route element={<ErrorPage />} path="/*" />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
