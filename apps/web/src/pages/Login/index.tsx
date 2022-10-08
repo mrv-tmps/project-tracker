@@ -21,6 +21,8 @@ import { useAuth } from '../../contexts/AuthProvider';
 
 import { signInWithEmailPassword } from '../../utils/Firebase';
 
+import * as S from '../styles';
+
 export function Login() {
   const { userDetails } = useAuth();
   const navigate = useNavigate();
@@ -66,50 +68,51 @@ export function Login() {
   }
 
   return (
-    <Container my={40} size={420}>
-      <Title
-        align="center"
-        sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
-      >
+    <S.PageContainer>
+      <Container py={150} size={420}>
+        <Title
+          align="center"
+          sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+        >
         Welcome!
-      </Title>
-      <Text align="center" color="dimmed" mt={5} size="sm">
+        </Title>
+        <Text align="center" color="dimmed" mt={5} size="sm">
         Do not have an account yet?{' '}
-        <Anchor<'a'> size="sm" onClick={() => navigate('/registration')}>
+          <Anchor<'a'> size="sm" onClick={() => navigate('/registration')}>
           Create account
-        </Anchor>
-      </Text>
-
-      <Paper withBorder mt={30} p={30} radius="md" shadow="md">
-        <form onSubmit={form.onSubmit(handleLogin)}>
-          <TextInput
-            required
-            error={form.errors['email'] && 'Invalid email'}
-            label="Email"
-            placeholder="hello@mantine.dev"
-            value={form.values['email']}
-            onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
-          />
-          <PasswordInput
-            required
-            error={form.errors['password'] && 'Password should include at least 6 characters'}
-            label="Password"
-            placeholder="Your password"
-            value={form.values['password']}
-            onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
-          />
-          <Group mt="md" position="apart">
-            <Checkbox label="Remember me" />
-            <Anchor<'a'> href="#" size="sm" onClick={(event) => event.preventDefault()}>
+          </Anchor>
+        </Text>
+        <Paper withBorder mt={30} p={30} radius="md" shadow="md">
+          <form onSubmit={form.onSubmit(handleLogin)}>
+            <TextInput
+              required
+              error={form.errors['email'] && 'Invalid email'}
+              label="Email"
+              placeholder="hello@mantine.dev"
+              value={form.values['email']}
+              onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
+            />
+            <PasswordInput
+              required
+              error={form.errors['password'] && 'Password should include at least 6 characters'}
+              label="Password"
+              placeholder="Your password"
+              value={form.values['password']}
+              onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
+            />
+            <Group mt="md" position="apart">
+              <Checkbox label="Remember me" />
+              <Anchor<'a'> href="#" size="sm" onClick={(event) => event.preventDefault()}>
               Forgot password?
-            </Anchor>
-          </Group>
-          <Button fullWidth mt="xl" type="submit">
+              </Anchor>
+            </Group>
+            <Button fullWidth mt="xl" type="submit">
             Sign in
-          </Button>
-        </form>
-      </Paper>
-    </Container>
+            </Button>
+          </form>
+        </Paper>
+      </Container>
+    </S.PageContainer>
   );
 }
 
