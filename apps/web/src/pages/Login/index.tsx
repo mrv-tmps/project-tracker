@@ -12,7 +12,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
-import { IconCheck } from '@tabler/icons';
+import { IconCheck, IconX } from '@tabler/icons';
 import { useNavigate } from 'react-router-dom';
 
 import { MINIMUM_PASSWORD_LENGTH } from '../../constants/Password';
@@ -36,14 +36,26 @@ export function Login() {
   });
 
   const handleLogin = async () => {
-    await signInWithEmailPassword(form.values.email, form.values.password);
-    showNotification({
-      color: 'teal',
-      icon: <IconCheck />,
-      message: 'You have successfully logged in!',
-      title: 'Success',
-    });
-    navigate('/');
+    try {
+      const user = await signInWithEmailPassword(form.values.email, form.values.password);
+
+      if (user) {
+        showNotification({
+          color: 'teal',
+          icon: <IconCheck />,
+          message: 'You have successfully logged in!',
+          title: 'Success',
+        });
+        navigate('/');
+      }
+    } catch(err) {
+      showNotification({
+        color: 'red',
+        icon: <IconX />,
+        message: 'Wrong password',
+        title: 'Error',
+      });
+    }
   };
 
   return (
