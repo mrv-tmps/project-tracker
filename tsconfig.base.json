@@ -17,7 +17,8 @@
     "paths": {
       "@project-tracker/api-docs": ["libs/api-docs/src/index.ts"],
       "@project-tracker/api-lib": ["libs/api-lib/src/index.ts"],
-      "@project-tracker/enums": ["libs/enums/src/index.ts"]
+      "@project-tracker/enums": ["libs/enums/src/index.ts"],
+      "@project-tracker/types": ["libs/types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
