@@ -1,3 +1,5 @@
+import { Role } from 'libs/enums/src';
+
 import {
   CreateDateColumn,
   Column,

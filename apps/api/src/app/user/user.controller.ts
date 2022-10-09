@@ -1,16 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('create')
-  @UsePipes(ValidationPipe)
-  create(@Body() createUserDto: CreateUserDto) {
+  @Post('')
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create(createUserDto);
   }
 
@@ -19,9 +19,9 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get('id/:id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findOne(+id);
+  @Get(':id')
+  getById(@Param('id') id: string): Promise<User> {
+    return this.userService.findOne(id);
   }
 
   @Patch(':id')

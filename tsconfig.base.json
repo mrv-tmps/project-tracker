@@ -15,8 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@mrv/api-docs": ["libs/api-docs/src/index.ts"],
-      "@mrv/api-lib": ["libs/api-lib/src/index.ts"]
+      "@project-tracker/api-docs": ["libs/api-docs/src/index.ts"],
+      "@project-tracker/api-lib": ["libs/api-lib/src/index.ts"],
+      "@project-tracker/enums": ["libs/enums/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
