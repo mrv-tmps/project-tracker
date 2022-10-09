@@ -3,6 +3,9 @@
   "version": 2,
   "projects": {
     "api": "apps/api",
+    "api-docs": "libs/api-docs",
+    "api-lib": "libs/api-lib",
+    "api-spec": "libs/api-spec",
     "web": "apps/web",
     "web-e2e": "apps/web-e2e"
   }

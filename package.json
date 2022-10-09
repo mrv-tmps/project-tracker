@@ -54,6 +54,7 @@
     "@nrwl/react": "14.7.17",
     "@nrwl/web": "14.7.17",
     "@nrwl/workspace": "14.7.17",
+    "@openapitools/openapi-generator-cli": "2.3.7",
     "@testing-library/react": "13.4.0",
     "@trumbitta/nx-plugin-openapi": "^1.12.1",
     "@types/jest": "28.1.1",

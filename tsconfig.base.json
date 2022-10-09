@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@mrv/api-docs": ["libs/api-docs/src/index.ts"],
+      "@mrv/api-lib": ["libs/api-lib/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
