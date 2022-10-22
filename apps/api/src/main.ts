@@ -17,7 +17,7 @@ async function bootstrap() {
     .setVersion(process.env.API_VERSION)
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api-docs', app, document);
 
   const port = process.env.PORT || 3333;
 
