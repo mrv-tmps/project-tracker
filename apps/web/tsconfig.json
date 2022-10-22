@@ -10,7 +10,14 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": "src",
+    "paths": {
+      "@project-tracker/api-docs": ["../../../libs/api-docs/src/index.ts"],
+      "@project-tracker/api-lib": ["../../../libs/api-lib/src/index.ts"],
+      "@project-tracker/enums": ["../../../libs/enums/src/index.ts"],
+      "@project-tracker/types": ["../../../libs/types/src/index.ts"]
+    }
   },
   "files": [],
   "include": [],
