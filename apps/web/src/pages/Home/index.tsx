@@ -23,15 +23,6 @@ function Home() {
     navigate('/login');
   }
 
-  const handleLogout = async () => {
-    await logout();
-    showNotification({
-      color: 'red',
-      message: 'See you next time!',
-      title: 'Signed Out',
-    });
-  };
-
   useEffect(() => {
     async function getUserProjects() {
       setLoading(true);
@@ -48,6 +39,19 @@ function Home() {
     }
   }, [userDetails, userProjects]);
 
+  function handleNavigateToProject(id: string) {
+    navigate(`/project/${id}`);
+  }
+
+  async function handleLogout() {
+    await logout();
+    showNotification({
+      color: 'red',
+      message: 'See you next time!',
+      title: 'Signed Out',
+    });
+  }
+
   const renderLoading = loading && <CustomLoader />;
 
   const renderProjectText =
@@ -63,7 +67,13 @@ function Home() {
     name,
     type,
   }) =>(
-    <Button key={id} color={type === Status.ACTIVE? 'indigo' : 'gray'} size={'md'}>
+    <Button
+      key={id}
+      color={type === Status.ACTIVE? 'indigo' : 'gray'}
+      disabled={type === Status.INACTIVE}
+      size={'md'}
+      onClick={() => handleNavigateToProject(name)}
+    >
       <Text size={'sm'}>{`${name}`}</Text>
     </Button>
   ));
