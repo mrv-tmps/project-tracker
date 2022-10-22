@@ -11,8 +11,10 @@
     }
   ],
   "compilerOptions": {
+    "strictPropertyInitialization": false,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "noImplicitOverride": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   }
