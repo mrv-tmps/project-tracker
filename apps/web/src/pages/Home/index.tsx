@@ -72,7 +72,7 @@ function Home() {
       color={type === Status.ACTIVE? 'indigo' : 'gray'}
       disabled={type === Status.INACTIVE}
       size={'md'}
-      onClick={() => handleNavigateToProject(name)}
+      onClick={() => handleNavigateToProject(id)}
     >
       <Text size={'sm'}>{`${name}`}</Text>
     </Button>
