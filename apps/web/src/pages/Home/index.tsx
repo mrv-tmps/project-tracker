@@ -69,9 +69,10 @@ function Home() {
   }) =>(
     <Button
       key={id}
-      color={type === Status.ACTIVE? 'indigo' : 'gray'}
+      color={type === Status.ACTIVE? 'dark' : 'gray'}
       disabled={type === Status.INACTIVE}
       size={'md'}
+      variant="outline"
       onClick={() => handleNavigateToProject(id)}
     >
       <Text size={'sm'}>{`${name}`}</Text>
