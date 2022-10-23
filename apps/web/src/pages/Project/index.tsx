@@ -1,11 +1,14 @@
-import { Button, Group, Stack, Text } from '@mantine/core';
+import { Button, Container, Group, Stack, Text } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import CustomLoader from 'components/CustomLoader';
+import { DateFormatEnums } from 'enums/DateFormat';
 import { fetchProject } from 'services/ProjectService';
 
 import { Project } from 'types/Project';
+
+import { formatDate } from 'utils/date.util';
 
 import * as S from '../styles';
 
@@ -37,6 +40,12 @@ function ProjectPage() {
     navigate('/');
   }
 
+  function getDueDate(dueDate: string | Date | undefined) {
+    const newDate = dueDate ? new Date(dueDate) : new Date();
+
+    return <Text size={'sm'}>{formatDate(newDate, DateFormatEnums.MONTH_DAY_YEAR)}</Text>;
+  }
+
   const renderLoading = loading && <CustomLoader />;
 
   const renderTaskText =
@@ -52,10 +61,19 @@ function ProjectPage() {
       key={task?.id}
       fullWidth
       color="dark"
-      size={'md'}
+      size={'lg'}
       variant="outline"
     >
-      <Text size={'sm'}>{`${task?.name}`}</Text>
+      <S.TaskButtonTextWrapper>
+        <Group position="left">
+          <Text size={'sm'}>{task?.name}</Text>
+        </Group>
+        <Group position="right" spacing={105}>
+          <Text size={'sm'}>{task?.assignee_user_id}</Text>
+          {getDueDate(task?.due_date)}
+          <Text size={'sm'}>{task?.status}</Text>
+        </Group>
+      </S.TaskButtonTextWrapper>
     </Button>
   );
 
@@ -69,12 +87,14 @@ function ProjectPage() {
         <Stack align="stretch">
           <Text size={36} weight={800}>{project?.name}</Text>
           {renderTaskText}
-          <S.Column>
+          <S.TaskColumn>
             {renderTaskList}
-            <Button fullWidth size={'md'}>
-                Create new task
-            </Button>
-          </S.Column>
+            <Group position="right">
+              <Button size={'md'}>
+                Add new ticket
+              </Button>
+            </Group>
+          </S.TaskColumn>
         </Stack>
       </Group>
     </S.PageContainer>
