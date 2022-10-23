@@ -1,8 +1,11 @@
 import Status from '../enums/Status';
 
+import { Task } from './Task';
+
 export type Project = {
+  created_by: string,
   id: string,
   name: string,
-  created_by: string,
+  tasks: Task[],
   type: Status,
 };

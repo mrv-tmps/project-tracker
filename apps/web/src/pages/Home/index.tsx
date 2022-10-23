@@ -23,15 +23,6 @@ function Home() {
     navigate('/login');
   }
 
-  const handleLogout = async () => {
-    await logout();
-    showNotification({
-      color: 'red',
-      message: 'See you next time!',
-      title: 'Signed Out',
-    });
-  };
-
   useEffect(() => {
     async function getUserProjects() {
       setLoading(true);
@@ -48,10 +39,23 @@ function Home() {
     }
   }, [userDetails, userProjects]);
 
+  function handleNavigateToProject(id: string) {
+    navigate(`/project/${id}`);
+  }
+
+  async function handleLogout() {
+    await logout();
+    showNotification({
+      color: 'red',
+      message: 'See you next time!',
+      title: 'Signed Out',
+    });
+  }
+
   const renderLoading = loading && <CustomLoader />;
 
   const renderProjectText =
-    <Text align="center" size={24} weight={400}>
+    <Text align="center" size={20} weight={400}>
       {userProjects
         ? `You currently have ${userProjects.length} projects.`
         : 'You have no projects yet. Create one now!'
@@ -63,7 +67,14 @@ function Home() {
     name,
     type,
   }) =>(
-    <Button key={id} color={type === Status.ACTIVE? 'indigo' : 'gray'} size={'md'}>
+    <Button
+      key={id}
+      color={type === Status.ACTIVE? 'dark' : 'gray'}
+      disabled={type === Status.INACTIVE}
+      size={'md'}
+      variant="outline"
+      onClick={() => handleNavigateToProject(id)}
+    >
       <Text size={'sm'}>{`${name}`}</Text>
     </Button>
   ));
@@ -74,9 +85,9 @@ function Home() {
       <Group position="right">
         <Button color="red" m={10} onClick={handleLogout}>Logout</Button>
       </Group>
-      <Group my={80} position="center">
-        <Stack>
-          <Text align="center" size={42} weight={800}>Projects</Text>
+      <Group align="stretch" my={80} position="center">
+        <Stack align="stretch">
+          <Text align="center" size={36} weight={800}>Projects</Text>
           {renderProjectText}
           <S.Column>
             {renderProjectList}
