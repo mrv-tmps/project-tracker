@@ -1,4 +1,4 @@
-import { Button, Container, Group, Stack, Text } from '@mantine/core';
+import { Button, Group, Stack, Text } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import { fetchProject } from 'services/ProjectService';
 
 import { Project } from 'types/Project';
 
-import { formatDate } from 'utils/date.util';
+import { formatDate } from 'utils/Date';
 
 import * as S from '../styles';
 
