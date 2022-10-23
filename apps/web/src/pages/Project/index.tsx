@@ -39,9 +39,18 @@ function ProjectPage() {
 
   const renderLoading = loading && <CustomLoader />;
 
+  const renderTaskText =
+  <Text size={20} weight={400}>
+    {project?.tasks
+      ? `You currently have ${project?.tasks.length} task/s in this project.`
+      : 'You have no tasks yet. Create one now!'
+    }
+  </Text>;
+
   const renderTaskList = project?.tasks.map((task)=>
     <Button
       key={task?.id}
+      fullWidth
       color="dark"
       size={'md'}
       variant="outline"
@@ -56,12 +65,13 @@ function ProjectPage() {
       <Group position="right">
         <Button color="gray" m={10} onClick={handleBack}>Back</Button>
       </Group>
-      <Group my={80} position="center">
-        <Stack>
-          <Text align="center" size={42} weight={800}>{project?.name}</Text>
+      <Group align="stretch" my={80} position="center">
+        <Stack align="stretch">
+          <Text size={36} weight={800}>{project?.name}</Text>
+          {renderTaskText}
           <S.Column>
             {renderTaskList}
-            <Button size={'md'}>
+            <Button fullWidth size={'md'}>
                 Create new task
             </Button>
           </S.Column>
