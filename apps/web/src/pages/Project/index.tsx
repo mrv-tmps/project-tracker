@@ -40,6 +40,10 @@ function ProjectPage() {
     navigate('/');
   }
 
+  function handleNavigateToTask(taskId: string) {
+    navigate(`/task/${taskId}`);
+  }
+
   function getDueDate(dueDate: string | Date | undefined) {
     const newDate = dueDate ? new Date(dueDate) : new Date();
 
@@ -63,6 +67,7 @@ function ProjectPage() {
       color="dark"
       size={'lg'}
       variant="outline"
+      onClick={() => handleNavigateToTask(task?.id)}
     >
       <S.TaskButtonTextWrapper>
         <Group position="left">

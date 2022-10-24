@@ -7,6 +7,7 @@ import Home from 'pages/Home';
 import Login from 'pages/Login';
 import Project from 'pages/Project';
 import Registration from 'pages/Registration';
+import Task from 'pages/Task';
 
 export function App() {
   return (
@@ -29,6 +30,13 @@ export function App() {
           path="/project"
         >
           <Route element={<Project />} path=":projectId" />
+        </Route>
+        <Route element={
+          <ProtectedRoute roles={[Role.PROJECT_MANAGER, Role.DEV]}>
+            <Task />
+          </ProtectedRoute>
+        } path="/task">
+          <Route element={<Task />} path=":taskId" />
         </Route>
         <Route element={<Registration />} path="/registration" />
         <Route element={<Login />} path="/login" />
