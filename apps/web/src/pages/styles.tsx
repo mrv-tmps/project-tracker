@@ -4,7 +4,19 @@ import styled from 'styled-components';
 export const PageContainer = styled.div`
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(180deg, rgba(203, 231, 255, 0.59375) 25.52%, #FFFFFF 100%);
+  position: relative;
+`;
+
+export const LogoContainer = styled.div`
+  position: absolute;
+  z-index: -1;
+  top: 10%;
+  left: 10%;
+  opacity: 0.3;
+
+  img {
+    height: 80vh;
+  }
 `;
 
 export const Column = styled.div`
