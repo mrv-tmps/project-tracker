@@ -31,9 +31,11 @@ export class Supabase {
       this.configService.get('SUPABASE_URL'),
       this.configService.get('SUPABASE_KEY'),
       {
-        autoRefreshToken: true,
-        detectSessionInUrl: false,
-      },
+        auth: {
+          autoRefreshToken: true,
+          detectSessionInUrl: false
+        },
+      }
     );
 
     this.clientInstance.auth.getUser(
