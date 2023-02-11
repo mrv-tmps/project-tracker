@@ -8,7 +8,7 @@
       "options": {
         "useDockerBuild": false,
         "generator": "typescript-axios",
-        "sourceSpecPathOrUrl": "libs/api-spec/src/api-spec.openapi.yml",
+        "sourceSpecPathOrUrl": "http://localhost:3333/api-docs-json",
         "additionalProperties": "typescriptThreePlus=true,supportsES6=true",
         "globalProperties": ""
       }

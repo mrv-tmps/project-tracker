@@ -97,9 +97,7 @@ export default function AuthLayout(props: Props) {
 
         console.log(saveUserSupabase);
 
-        if (saveUserSupabase) {
-          navigate('/login');
-        }
+        // navigate('/login');
       }
     } catch (err) {
       showNotification({

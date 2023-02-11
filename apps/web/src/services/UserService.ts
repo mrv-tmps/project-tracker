@@ -1,5 +1,5 @@
 import { showNotification } from '@mantine/notifications';
-import { UserApi } from '@project-tracker/api-lib';
+import { DefaultApi } from '@project-tracker/api-lib';
 
 import ApiClient from '../api-client';
 
@@ -7,11 +7,11 @@ import { projects } from '../constants/PseudoData';
 
 import { CreateUserDto } from './../../../api/src/app/user/dto/create-user.dto';
 
-const userApi = ApiClient.use(UserApi);
+const userApi = ApiClient.use(DefaultApi);
 
 export async function createUser(userData: CreateUserDto) {
   try {
-    const { data } = await userApi.userCon;
+    const { data } = await userApi.userControllerCreate(userData);
 
     return data;
   } catch (error: any) {
