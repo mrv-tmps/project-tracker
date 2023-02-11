@@ -20,6 +20,7 @@ import { MINIMUM_PASSWORD_LENGTH } from 'constants/Password';
 import routes from 'constants/routes';
 import { useAuth } from 'contexts/AuthProvider';
 
+import { createUser } from 'services/UserService';
 import { registerWithEmailAndPassword, signInWithEmailPassword } from 'utils/Firebase';
 
 import * as S from './styles';
@@ -87,8 +88,18 @@ export default function AuthLayout(props: Props) {
           message: 'You have successfully signed up!',
           title: 'Success',
         });
+        const saveUserSupabase = await createUser({
+          email: user.email ?? '',
+          firebase_id: user.uid,
+          first_name: user.displayName ?? '',
+          last_name: user.displayName ?? '',
+        });
 
-        navigate('/login');
+        console.log(saveUserSupabase);
+
+        if (saveUserSupabase) {
+          navigate('/login');
+        }
       }
     } catch (err) {
       showNotification({

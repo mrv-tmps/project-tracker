@@ -11,7 +11,7 @@ const userApi = ApiClient.use(UserApi);
 
 export async function createUser(userData: CreateUserDto) {
   try {
-    const { data } = await userApi.createUser(userData);
+    const { data } = await userApi.userCon;
 
     return data;
   } catch (error: any) {
@@ -25,7 +25,7 @@ export async function createUser(userData: CreateUserDto) {
   }
 }
 
-export async function fetchUserById(id : string) {
+export async function fetchUserById(id: string) {
   try {
     const data = id && projects;
 
