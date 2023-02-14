@@ -65,7 +65,6 @@ export default function AuthLayout(props: Props) {
           message: 'You have successfully logged in!',
           title: 'Success',
         });
-        navigate('/');
       }
     } catch (err) {
       showNotification({
@@ -88,16 +87,12 @@ export default function AuthLayout(props: Props) {
           message: 'You have successfully signed up!',
           title: 'Success',
         });
-        const saveUserSupabase = await createUser({
+        await createUser({
           email: user.email ?? '',
           firebase_id: user.uid,
           first_name: user.displayName ?? '',
           last_name: user.displayName ?? '',
         });
-
-        console.log(saveUserSupabase);
-
-        // navigate('/login');
       }
     } catch (err) {
       showNotification({
