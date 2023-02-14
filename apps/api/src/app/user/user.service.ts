@@ -23,13 +23,35 @@ export class UserService {
   }
 
   async createUserAccount(createUserDto: CreateUserDto) {
-    Logger.log('Service -> Creating new Account: ', createUserDto);
-    const { data, error } = await this.supabase.getClient().from('user').insert(createUserDto);
+    Logger.log('Service -> Creating new user Account: ', createUserDto);
+    const { data, error } = await this.supabase.getClient().auth.signUp({
+      email: createUserDto.email,
+      password: createUserDto.firebase_id,
+    });
+
     if (error) {
       throw error;
     }
 
-    return data;
+    if (data) {
+      Logger.log('Service -> Creating new Account Data: ', createUserDto);
+      const { firebase_id, email } = createUserDto;
+      Logger.log('-Firebase-ID', firebase_id);
+      Logger.log('-Email', email);
+      Logger.log('-SupabaseID', data.user.id);
+      const userData = await this.supabase.getClient().from('user')
+        .insert({
+          email,
+          firebase_id,
+          id: data.user.id,
+        }).single();
+
+      if (userData.error) {
+        throw error;
+      }
+
+      return userData.data;
+    }
   }
 
   findAll() {
