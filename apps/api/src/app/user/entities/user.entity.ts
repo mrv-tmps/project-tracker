@@ -1,6 +1,8 @@
 import { Role } from '@project-tracker/enums';
 
-import { CreateDateColumn, Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { CreateDateColumn, Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from 'typeorm';
+
+import { Project } from '../../project/entities/project.entity';
 
 @Entity('user')
 export class User {
@@ -24,6 +26,9 @@ export class User {
     type: 'enum',
   })
   role: Role;
+
+  @OneToMany(() => Project, (project) => project.created_by)
+  projects_created: Project[];
 
   @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;

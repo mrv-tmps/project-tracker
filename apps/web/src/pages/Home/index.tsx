@@ -28,8 +28,8 @@ function Home() {
       setLoading(true);
       const currentUserProjects = await fetchUserProjects(userDetails?.uid ?? '');
 
-      if (currentUserProjects && currentUserProjects.length > 0) {
-        setUserProjects(currentUserProjects);
+      if (currentUserProjects) {
+        console.log(currentUserProjects);
       }
       setLoading(false);
     }
@@ -66,10 +66,10 @@ function Home() {
     id,
     name,
     type,
-  }) =>(
+  }) => (
     <Button
       key={id}
-      color={type === Status.ACTIVE? 'dark' : 'gray'}
+      color={type === Status.ACTIVE ? 'dark' : 'gray'}
       disabled={type === Status.INACTIVE}
       size={'md'}
       variant="outline"
@@ -92,7 +92,7 @@ function Home() {
           <S.Column>
             {renderProjectList}
             <Button size={'md'}>
-                Create new project
+              Create new project
             </Button>
           </S.Column>
         </Stack>

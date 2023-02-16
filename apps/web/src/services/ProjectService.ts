@@ -1,10 +1,14 @@
 import { showNotification } from '@mantine/notifications';
+import { DefaultApi } from '@project-tracker/api-lib';
 
+import ApiClient from '../api-client';
 import { projects } from '../constants/PseudoData';
 
-export async function fetchUserProjects(userId : string) {
+const projectApi = ApiClient.use(DefaultApi);
+
+export async function fetchUserProjects(userId: string) {
   try {
-    const data = userId && projects;
+    const data = await projectApi.userControllerGetById(userId);
 
     return data;
   } catch (error) {
@@ -18,7 +22,7 @@ export async function fetchUserProjects(userId : string) {
   }
 }
 
-export async function fetchProject(projectId : string) {
+export async function fetchProject(projectId: string) {
   try {
     const data = projects.find((project) => project.id === projectId);
 

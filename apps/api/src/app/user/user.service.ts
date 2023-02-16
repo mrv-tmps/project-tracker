@@ -38,7 +38,6 @@ export class UserService {
     }
 
     return data;
-
   }
 
   findAll() {
