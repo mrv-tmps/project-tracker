@@ -1,4 +1,3 @@
-import { Paper } from '@mantine/core';
 import styled from 'styled-components';
 
 export const PageContainer = styled.div`
