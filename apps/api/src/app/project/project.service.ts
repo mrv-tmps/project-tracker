@@ -30,7 +30,7 @@ export class ProjectService {
     return data;
   }
 
-  async getAllUserProjects(id: string): Promise<GetProjectResponseDto> {
+  async getAllUserProjects(id: string): Promise<GetProjectResponseDto | any[]> {
     Logger.log('-UserID', id);
     const { data, error } = await this.supabase.getClient().from('project').select().eq('created_by', id);
 

@@ -16,7 +16,7 @@ export class ProjectController {
   }
 
   @Get(':id')
-  getProjectsById(@Param('id') id: string): Promise<GetProjectResponseDto> {
+  getProjectsById(@Param('id') id: string): Promise<GetProjectResponseDto | any[]> {
     return this.projectService.getAllUserProjects(id);
   }
 
