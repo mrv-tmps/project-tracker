@@ -6,9 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { SupabaseModule } from './supabase';
-import { UserModule } from './user/user.module';
+import { Project } from './project/entities/project.entity';
 import { ProjectModule } from './project/project.module';
+import { SupabaseModule } from './supabase';
+import { User } from './user/entities/user.entity';
+import { UserModule } from './user/user.module';
 
 @Module({
   controllers: [AppController],
@@ -23,7 +25,7 @@ import { ProjectModule } from './project/project.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        entities: [User, Project],
         synchronize: true,
       }),
       inject: [ConfigService],

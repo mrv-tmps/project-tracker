@@ -53,14 +53,14 @@ function ProjectPage() {
   const renderLoading = loading && <CustomLoader />;
 
   const renderTaskText =
-  <Text size={20} weight={400}>
-    {project?.tasks
-      ? `You currently have ${project?.tasks.length} task/s in this project.`
-      : 'You have no tasks yet. Create one now!'
-    }
-  </Text>;
+    <Text size={20} weight={400}>
+      {project?.tasks
+        ? `You currently have ${project?.tasks.length} task/s in this project.`
+        : 'You have no tasks yet. Create one now!'
+      }
+    </Text>;
 
-  const renderTaskList = project?.tasks.map((task)=>
+  const renderTaskList = project?.tasks?.map((task) =>
     <Button
       key={task?.id}
       fullWidth

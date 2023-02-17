@@ -18,7 +18,7 @@ export class User {
   @Column()
   email: string;
 
-  @Column({ nullable: true })
+  @Column()
   firebase_id?: string;
 
   @Column({
@@ -30,12 +30,12 @@ export class User {
   @OneToMany(() => Project, (project) => project.created_by)
   projects_created: Project[];
 
-  @CreateDateColumn({ type: 'timestamptz' })
+  @CreateDateColumn({ nullable: true, type: 'timestamptz' })
   created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz' })
+  @UpdateDateColumn({ nullable: true, type: 'timestamptz' })
   updated_at: Date;
 
-  @DeleteDateColumn({ type: 'timestamptz' })
+  @DeleteDateColumn({ nullable: true, type: 'timestamptz' })
   deleted_at: Date;
 }

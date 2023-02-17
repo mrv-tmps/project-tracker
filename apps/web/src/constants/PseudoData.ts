@@ -1,13 +1,13 @@
 import TaskStatus from 'enums/TaskStatus';
 import { Task } from 'types/Task';
 
-import Status from '../enums/Status';
 import { Project } from '../types/Project';
 
 export const projects: Project[] = [
   {
     created_by: 'Merv',
     id: '1',
+    is_active: true,
     name: 'Project Tracker',
     tasks: [
       {
@@ -21,11 +21,11 @@ export const projects: Project[] = [
         status: TaskStatus.IN_PROGRESS,
       },
     ],
-    type: Status.ACTIVE,
   },
   {
     created_by: 'Ferlie',
     id: '2',
+    is_active: true,
     name: 'Empath',
     tasks: [
       {
@@ -48,11 +48,11 @@ export const projects: Project[] = [
         status: TaskStatus.DONE,
       },
     ],
-    type: Status.ACTIVE,
   },
   {
     created_by: 'Ezra',
     id: '3',
+    is_active: true,
     name: 'Enhance CRM',
     tasks: [
       {
@@ -86,11 +86,11 @@ export const projects: Project[] = [
         status: TaskStatus.TO_DO,
       },
     ],
-    type: Status.ACTIVE,
   },
   {
     created_by: 'Raven',
     id: '4',
+    is_active: true,
     name: 'Symph OS V2',
     tasks: [
       {
@@ -103,7 +103,6 @@ export const projects: Project[] = [
         status: TaskStatus.TO_DO,
       },
     ],
-    type: Status.INACTIVE,
   },
 ];
 

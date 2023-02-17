@@ -1,5 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Role } from '@project-tracker/enums';
 import { Repository } from 'typeorm';
 
 import { Supabase } from './../supabase/supabase';
@@ -31,6 +32,9 @@ export class UserService {
       .insert({
         email,
         firebase_id,
+        first_name: 'Mervin',
+        last_name: 'Tampus',
+        role: Role.PROJECT_MANAGER,
       }).single();
 
     if (error) {

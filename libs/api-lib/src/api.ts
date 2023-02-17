@@ -63,9 +63,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerCreate: async (body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        projectControllerCreateNewProject: async (body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
-            assertParamExists('projectControllerCreate', 'body', body)
+            assertParamExists('projectControllerCreateNewProject', 'body', body)
             const localVarPath = `/api/project`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -391,8 +391,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectControllerCreate(body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectControllerCreate(body, options);
+        async projectControllerCreateNewProject(body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.projectControllerCreateNewProject(body, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -500,8 +500,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerCreate(body: object, options?: any): AxiosPromise<void> {
-            return localVarFp.projectControllerCreate(body, options).then((request) => request(axios, basePath));
+        projectControllerCreateNewProject(body: object, options?: any): AxiosPromise<void> {
+            return localVarFp.projectControllerCreateNewProject(body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -603,8 +603,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public projectControllerCreate(body: object, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).projectControllerCreate(body, options).then((request) => request(this.axios, this.basePath));
+    public projectControllerCreateNewProject(body: object, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).projectControllerCreateNewProject(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

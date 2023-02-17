@@ -3,23 +3,19 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm';
 
-import { User } from '../../user/entities/user.entity';
-
 @Entity('project')
 export class Project {
-  @CreateDateColumn({ type: 'timestamptz' })
+  @CreateDateColumn({ nullable: true, type: 'timestamptz' })
   created_at: Date;
 
-  @DeleteDateColumn({ type: 'timestamptz' })
+  @DeleteDateColumn({ nullable: true, type: 'timestamptz' })
   deleted_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz' })
+  @UpdateDateColumn({ nullable: true, type: 'timestamptz' })
   updated_at: Date;
 
   @PrimaryGeneratedColumn('uuid')
@@ -31,7 +27,6 @@ export class Project {
   @Column()
   is_active: boolean;
 
-  @ManyToOne(() => User, (user) => user.projects_created)
-  @JoinColumn({ name: 'user_id' })
-  created_by: User;
+  @Column()
+  created_by: string;
 }
