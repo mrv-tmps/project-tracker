@@ -1,6 +1,8 @@
 import { Role } from '@project-tracker/enums';
 
-import { CreateDateColumn, Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { CreateDateColumn, Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from 'typeorm';
+
+import { Project } from '../../project/entities/project.entity';
 
 @Entity('user')
 export class User {
@@ -16,7 +18,7 @@ export class User {
   @Column()
   email: string;
 
-  @Column({ nullable: true })
+  @Column()
   firebase_id?: string;
 
   @Column({
@@ -25,12 +27,15 @@ export class User {
   })
   role: Role;
 
-  @CreateDateColumn({ type: 'timestamptz' })
+  @OneToMany(() => Project, (project) => project.created_by)
+  projects_created: Project[];
+
+  @CreateDateColumn({ nullable: true, type: 'timestamptz' })
   created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz' })
+  @UpdateDateColumn({ nullable: true, type: 'timestamptz' })
   updated_at: Date;
 
-  @DeleteDateColumn({ type: 'timestamptz' })
+  @DeleteDateColumn({ nullable: true, type: 'timestamptz' })
   deleted_at: Date;
 }

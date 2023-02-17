@@ -3,6 +3,7 @@ import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 
 import { IconCheck, IconX } from '@tabler/icons';
+
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +12,6 @@ import CustomModal from 'components/CustomModal';
 import CustomLoader from '../../components/CustomLoader';
 
 import { useAuth } from '../../contexts/AuthProvider';
-import Status from '../../enums/Status';
 import { createNewProject, fetchUserProjects } from '../../services/ProjectService';
 import { Project } from '../../types/Project';
 import { logout } from '../../utils/Firebase';
@@ -21,7 +21,7 @@ import * as S from '../styles';
 function Home() {
   const { userDetails } = useAuth();
   const navigate = useNavigate();
-  const [userProjects, setUserProjects] = useState<Project[]>();
+  const [userProjects, setUserProjects] = useState<Project[] | void>();
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpened, setIsOpened] = useState(false);
 
@@ -30,20 +30,20 @@ function Home() {
   }
 
   useEffect(() => {
-    async function getUserProjects() {
-      setLoading(true);
-      const currentUserProjects = await fetchUserProjects(userDetails?.uid ?? '');
-
-      if (currentUserProjects && currentUserProjects.length > 0) {
-        setUserProjects(currentUserProjects);
-      }
-      setLoading(false);
-    }
-
     if (userDetails) {
       getUserProjects();
     }
-  }, [userDetails, userProjects]);
+  }, [userDetails]);
+
+  async function getUserProjects() {
+    setLoading(true);
+    const currentUserProjects = await fetchUserProjects(userDetails?.uid ?? '');
+
+    if (currentUserProjects) {
+      setUserProjects(currentUserProjects.data);
+    }
+    setLoading(false);
+  }
 
   function handleNavigateToProject(id: string) {
     navigate(`/project/${id}`);
@@ -75,12 +75,12 @@ function Home() {
   const renderProjectList = userProjects?.map(({
     id,
     name,
-    type,
+    is_active,
   }) => (
     <Button
       key={id}
-      color={type === Status.ACTIVE ? 'dark' : 'gray'}
-      disabled={type === Status.INACTIVE}
+      color={is_active ? 'dark' : 'gray'}
+      disabled={!is_active}
       size={'md'}
       variant="outline"
       onClick={() => handleNavigateToProject(id)}
@@ -102,7 +102,11 @@ function Home() {
 
   const handleSaveProject = async () => {
     try {
-      const project = await createNewProject(formReturnType.values.name, formReturnType.values.id);
+      const project = await createNewProject({
+        created_by: formReturnType.values.id,
+        is_active: true,
+        name: formReturnType.values.name,
+      });
 
       if (project) {
         showNotification({
@@ -112,6 +116,7 @@ function Home() {
           title: 'Success',
         });
 
+        getUserProjects();
         formReturnType.reset();
         toggleModalDisplay();
       }

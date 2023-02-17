@@ -1,4 +1,5 @@
 import { showNotification } from '@mantine/notifications';
+
 import { DefaultApi } from '@project-tracker/api-lib';
 
 import ApiClient from '../api-client';

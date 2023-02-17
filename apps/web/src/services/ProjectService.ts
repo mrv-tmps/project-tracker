@@ -1,10 +1,17 @@
 import { showNotification } from '@mantine/notifications';
 
+import { DefaultApi } from '@project-tracker/api-lib';
+
+import ApiClient from '../api-client';
 import { projects } from '../constants/PseudoData';
 
-export async function createNewProject(name: string, userId: string) {
+import { CreateProjectDto } from './../../../api/src/app/project/dto/create-project.dto';
+
+const projectApi = ApiClient.use(DefaultApi);
+
+export async function createNewProject(createProjectDto: CreateProjectDto) {
   try {
-    const data = userId && projects;
+    const data = await projectApi.projectControllerCreateNewProject(createProjectDto);
 
     return data;
   } catch (error) {
@@ -20,7 +27,7 @@ export async function createNewProject(name: string, userId: string) {
 
 export async function fetchUserProjects(userId: string) {
   try {
-    const data = userId && projects;
+    const data = await projectApi.projectControllerGetProjectsById(userId);
 
     return data;
   } catch (error) {
