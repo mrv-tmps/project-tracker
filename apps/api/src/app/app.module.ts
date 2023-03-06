@@ -11,6 +11,7 @@ import { ProjectModule } from './project/project.module';
 import { SupabaseModule } from './supabase';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   controllers: [AppController],
@@ -33,6 +34,7 @@ import { UserModule } from './user/user.module';
     UserModule,
     SupabaseModule,
     ProjectModule,
+    TaskModule,
   ],
   providers: [AppService],
 })

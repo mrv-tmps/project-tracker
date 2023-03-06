@@ -41,6 +41,23 @@ export class ProjectService {
     return data;
   }
 
+  /*
+   * async getProjectTasks(id: string): Promise<GetProjectResponseDto | any[]> {
+   *   Logger.log('-ProjectID', id);
+   *   const { data, error } = await this.supabase.getClient().from('task').select().eq('project_id', id);
+   */
+
+  /*
+   *   if (error) {
+   *     throw error;
+   *   }
+   */
+
+  /*
+   *   return data;
+   * }
+   */
+
   findOne(id: number) {
     return `This action returns a #${id} project`;
   }
