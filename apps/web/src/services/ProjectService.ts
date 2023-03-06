@@ -1,9 +1,7 @@
 import { showNotification } from '@mantine/notifications';
-
 import { DefaultApi } from '@project-tracker/api-lib';
 
 import ApiClient from '../api-client';
-import { projects } from '../constants/PseudoData';
 
 import { CreateProjectDto } from './../../../api/src/app/project/dto/create-project.dto';
 
@@ -28,22 +26,6 @@ export async function createNewProject(createProjectDto: CreateProjectDto) {
 export async function fetchUserProjects(userId: string) {
   try {
     const data = await projectApi.projectControllerGetProjectsById(userId);
-
-    return data;
-  } catch (error) {
-    showNotification({
-      color: 'red',
-      message: 'An error was encountered while getting the user projects. Please refresh the page.',
-      title: 'Error',
-    });
-
-    return null;
-  }
-}
-
-export async function fetchProject(projectId: string) {
-  try {
-    const data = projects.find((project) => project.id === projectId);
 
     return data;
   } catch (error) {
