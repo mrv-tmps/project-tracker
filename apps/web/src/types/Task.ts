@@ -1,7 +1,7 @@
 import TaskStatus from 'enums/TaskStatus';
 
 export type Task = {
-  assignee_user_id: string,
+  assignee_id: string,
   created_by: string,
   description: string,
   due_date?: Date | string,

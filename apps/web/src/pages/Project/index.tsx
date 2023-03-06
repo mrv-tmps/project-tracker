@@ -11,8 +11,9 @@ import { useAuth } from 'contexts/AuthProvider';
 import { DateFormatEnums } from 'enums/DateFormat';
 import TaskStatus from 'enums/TaskStatus';
 
-import { Project } from 'types/Project';
+import { fetchTasks } from 'services/TaskService';
 
+import { Task } from 'types/Task';
 import { formatDate } from 'utils/Date';
 
 import * as S from '../styles';
@@ -20,27 +21,26 @@ import * as S from '../styles';
 function ProjectPage() {
   const params = useParams();
   const { userDetails } = useAuth();
-  const [project, setProject] = useState<Project>();
+  const [tasks, setTasks] = useState<Task[] | void>();
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpened, setIsOpened] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (params['projectId']) {
-      getUserProject();
+      getProjectTasks();
     }
-  }, [params, project]);
+  }, [params]);
 
-  async function getUserProject() {
+  async function getProjectTasks() {
     setLoading(true);
 
-    // const currentProject = params['projectId'] && await fetchTasks(params['projectId']);
+    const currentTasks = params['projectId'] && await fetchTasks(params['projectId']);
 
-    /*
-     * if (currentProject) {
-     *   console.log(currentProject);
-     * }
-     */
+    if (currentTasks) {
+      console.log(currentTasks.data);
+      setTasks(currentTasks.data);
+    }
 
     setLoading(false);
   }
@@ -54,9 +54,9 @@ function ProjectPage() {
   }
 
   function getDueDate(dueDate: string | Date | undefined) {
-    const newDate = dueDate ? new Date(dueDate) : new Date();
+    const newDate = dueDate ? new Date(dueDate) : '';
 
-    return <Text size={'sm'}>{formatDate(newDate, DateFormatEnums.MONTH_DAY_YEAR)}</Text>;
+    return <Text size={'sm'}>{newDate ? formatDate(newDate, DateFormatEnums.MONTH_DAY_YEAR) : ''}</Text>;
   }
 
   const formReturnType = useForm({
@@ -102,7 +102,7 @@ function ProjectPage() {
      */
 
     /*
-     *     getUserProject();
+     *     getProjectTasks();
      *     formReturnType.reset();
      *     toggleModalDisplay();
      *   }
@@ -121,13 +121,13 @@ function ProjectPage() {
 
   const renderTaskText =
     <Text size={20} weight={400}>
-      {project?.tasks
-        ? `You currently have ${project?.tasks.length} task/s in this project.`
+      {tasks
+        ? `You currently have ${tasks.length} task/s in this project.`
         : 'You have no tasks yet. Create one now!'
       }
     </Text>;
 
-  const renderTaskList = project?.tasks?.map((task) =>
+  const renderTaskList = tasks?.map((task) =>
     <Button
       key={task?.id}
       fullWidth
@@ -141,7 +141,7 @@ function ProjectPage() {
           <Text size={'sm'}>{task?.name}</Text>
         </Group>
         <Group position="right" spacing={105}>
-          <Text size={'sm'}>{task?.assignee_user_id}</Text>
+          <Text size={'sm'}>{task?.assignee_id}</Text>
           {getDueDate(task?.due_date)}
           <Text size={'sm'}>{task?.status}</Text>
         </Group>
@@ -220,7 +220,7 @@ function ProjectPage() {
       </Group>
       <Group align="stretch" my={80} position="center">
         <Stack align="stretch">
-          <Text size={36} weight={800}>{project?.name}</Text>
+          <Text size={36} weight={800}>{'LibMGT'}</Text>
           {renderTaskText}
           <S.TaskColumn>
             {renderTaskList}

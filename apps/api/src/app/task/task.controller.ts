@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 
 import { CreateTaskDto } from './dto/create-task.dto';
+import { GetTaskResponseDto } from './dto/get-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskService } from './task.service';
 
@@ -13,14 +14,9 @@ export class TaskController {
     return this.taskService.create(createTaskDto);
   }
 
-  @Get()
-  findAll() {
-    return this.taskService.findAll();
-  }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskService.findOne(+id);
+  getTasksByProjectId(@Param('id') id: string): Promise<GetTaskResponseDto | any[]> {
+    return this.taskService.getAllProjectTasks(id);
   }
 
   @Patch(':id')

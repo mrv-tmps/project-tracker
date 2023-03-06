@@ -11,7 +11,7 @@ export const projects: Project[] = [
     name: 'Project Tracker',
     tasks: [
       {
-        assignee_user_id: 'Merv Tampus',
+        assignee_id: 'Merv Tampus',
         created_by: 'Merv',
         description: 'Create Project Page',
         due_date: '2022-10-23T13:42:18.631208Z',
@@ -29,7 +29,7 @@ export const projects: Project[] = [
     name: 'Empath',
     tasks: [
       {
-        assignee_user_id: 'Merv Tampus',
+        assignee_id: 'Merv Tampus',
         created_by: 'Merv',
         description: 'Create Empath Consent Form',
         due_date: '2022-10-23T13:42:18.631208Z',
@@ -39,7 +39,7 @@ export const projects: Project[] = [
         status: TaskStatus.DONE,
       },
       {
-        assignee_user_id: 'Merv Tampus',
+        assignee_id: 'Merv Tampus',
         created_by: 'Merv',
         description: 'Create Empath Consent Form',
         id: '2',
@@ -56,7 +56,7 @@ export const projects: Project[] = [
     name: 'Enhance CRM',
     tasks: [
       {
-        assignee_user_id: 'Merv Tampus',
+        assignee_id: 'Merv Tampus',
         created_by: 'Merv',
         description: 'Add sidebar sub items',
         due_date: '2022-10-23T13:42:18.631208Z',
@@ -66,7 +66,7 @@ export const projects: Project[] = [
         status: TaskStatus.TO_DO,
       },
       {
-        assignee_user_id: 'Merv Tampus',
+        assignee_id: 'Merv Tampus',
         created_by: 'Merv',
         description: 'Add search button',
         due_date: '2022-10-23T13:42:18.631208Z',
@@ -76,7 +76,7 @@ export const projects: Project[] = [
         status: TaskStatus.TO_DO,
       },
       {
-        assignee_user_id: 'Merv Tampus',
+        assignee_id: 'Merv Tampus',
         created_by: 'Merv',
         description: 'Add event participants list',
         due_date: '2022-10-23T13:42:18.631208Z',
@@ -94,7 +94,7 @@ export const projects: Project[] = [
     name: 'Symph OS V2',
     tasks: [
       {
-        assignee_user_id: 'Merv Tampus',
+        assignee_id: 'Merv Tampus',
         created_by: 'Merv',
         description: 'Add Project Logo Component Backend',
         id: '1',
@@ -108,7 +108,7 @@ export const projects: Project[] = [
 
 export const tasks: Task[] = [
   {
-    assignee_user_id: 'Merv Tampus',
+    assignee_id: 'Merv Tampus',
     created_by: 'Merv',
     description: 'Create Project Page',
     due_date: '2022-10-23T13:42:18.631208Z',
@@ -118,7 +118,7 @@ export const tasks: Task[] = [
     status: TaskStatus.IN_PROGRESS,
   },
   {
-    assignee_user_id: 'Merv Tampus',
+    assignee_id: 'Merv Tampus',
     created_by: 'Merv',
     description: 'Create Empath Consent Form',
     due_date: '2022-10-23T13:42:18.631208Z',
@@ -128,7 +128,7 @@ export const tasks: Task[] = [
     status: TaskStatus.DONE,
   },
   {
-    assignee_user_id: 'Merv Tampus',
+    assignee_id: 'Merv Tampus',
     created_by: 'Merv',
     description: 'Create Empath Consent Form',
     id: '3',
@@ -137,7 +137,7 @@ export const tasks: Task[] = [
     status: TaskStatus.DONE,
   },
   {
-    assignee_user_id: 'Merv Tampus',
+    assignee_id: 'Merv Tampus',
     created_by: 'Merv',
     description: 'Add sidebar sub items',
     due_date: '2022-10-23T13:42:18.631208Z',
@@ -147,7 +147,7 @@ export const tasks: Task[] = [
     status: TaskStatus.TO_DO,
   },
   {
-    assignee_user_id: 'Merv Tampus',
+    assignee_id: 'Merv Tampus',
     created_by: 'Merv',
     description: 'Add search button',
     due_date: '2022-10-23T13:42:18.631208Z',
@@ -157,7 +157,7 @@ export const tasks: Task[] = [
     status: TaskStatus.TO_DO,
   },
   {
-    assignee_user_id: 'Merv Tampus',
+    assignee_id: 'Merv Tampus',
     created_by: 'Merv',
     description: 'Add event participants list',
     due_date: '2022-10-23T13:42:18.631208Z',
@@ -167,7 +167,7 @@ export const tasks: Task[] = [
     status: TaskStatus.TO_DO,
   },
   {
-    assignee_user_id: 'Merv Tampus',
+    assignee_id: 'Merv Tampus',
     created_by: 'Merv',
     description: 'Add Project Logo Component Backend',
     id: '7',
