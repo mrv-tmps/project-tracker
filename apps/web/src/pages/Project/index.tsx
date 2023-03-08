@@ -3,6 +3,7 @@ import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck, IconChevronDown, IconX } from '@tabler/icons';
 import { useState, useEffect } from 'react';
+import DatePicker from 'react-date-picker';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import CustomLoader from 'components/CustomLoader';
@@ -11,7 +12,7 @@ import { useAuth } from 'contexts/AuthProvider';
 import { DateFormatEnums } from 'enums/DateFormat';
 import TaskStatus from 'enums/TaskStatus';
 
-import { fetchTasks } from 'services/TaskService';
+import { createNewTask, fetchTasks } from 'services/TaskService';
 
 import { Task } from 'types/Task';
 import { formatDate } from 'utils/Date';
@@ -38,7 +39,6 @@ function ProjectPage() {
     const currentTasks = params['projectId'] && await fetchTasks(params['projectId']);
 
     if (currentTasks) {
-      console.log(currentTasks.data);
       setTasks(currentTasks.data);
     }
 
@@ -63,6 +63,7 @@ function ProjectPage() {
     initialValues: {
       assigneeId: '',
       description: '',
+      dueDate: '',
       id: userDetails?.uid ?? '',
       name: '',
       projectId: params['projectId'],
@@ -70,7 +71,10 @@ function ProjectPage() {
     },
 
     validate: {
-      name: (val) => (val.length < 1 ? 'Password should include at least 1 characters' : null),
+      assigneeId: (val) => (val.length < 1 ? 'Assignee should include at least contain 1 character' : null),
+      dueDate: (val) => (val.length < 1 ? 'Please pick a date' : null),
+      name: (val) => (val.length < 1 ? 'Name should include at least contain 1 character' : null),
+      status: (val) => (val.length < 1 ? 'Please indicate a status' : null),
     },
   });
 
@@ -79,42 +83,37 @@ function ProjectPage() {
   };
 
   const handleSaveTask = async () => {
-    /*
-     * try {
-     *   const task = await createNewTask({
-     *     assignee_id: formReturnType.values.assigneeId,
-     *     created_by: formReturnType.values.id,
-     *     description: formReturnType.values.description,
-     *     name: formReturnType.values.name,
-     *     project_id: formReturnType.values.projectId,
-     *     status: formReturnType.values.status,
-     *   });
-     */
+    try {
+      const task = await createNewTask({
+        assignee_id: formReturnType.values.assigneeId,
+        created_by: formReturnType.values.id,
+        description: formReturnType.values.description,
+        due_date: formReturnType.values.dueDate,
+        name: formReturnType.values.name,
+        project_id: formReturnType.values.projectId ?? '',
+        status: formReturnType.values.status,
+      });
 
-    /*
-     *   if (task) {
-     *     showNotification({
-     *       color: 'teal',
-     *       icon: <IconCheck />,
-     *       message: 'You have successfully created a new project.',
-     *       title: 'Success',
-     *     });
-     */
+      if (task) {
+        showNotification({
+          color: 'teal',
+          icon: <IconCheck />,
+          message: 'You have successfully created a new project.',
+          title: 'Success',
+        });
 
-    /*
-     *     getProjectTasks();
-     *     formReturnType.reset();
-     *     toggleModalDisplay();
-     *   }
-     * } catch (err) {
-     *   showNotification({
-     *     color: 'red',
-     *     icon: <IconX />,
-     *     message: 'You have failed to create a new project.',
-     *     title: 'Error',
-     *   });
-     * }
-     */
+        getProjectTasks();
+        formReturnType.reset();
+        toggleModalDisplay();
+      }
+    } catch (err) {
+      showNotification({
+        color: 'red',
+        icon: <IconX />,
+        message: 'You have failed to create a new project.',
+        title: 'Error',
+      });
+    }
   };
 
   const renderLoading = loading && <CustomLoader />;
@@ -195,6 +194,12 @@ function ProjectPage() {
           styles={{ rightSection: { pointerEvents: 'none' } }}
           value={formReturnType.values['status']}
           onChange={(value) => value && formReturnType.setFieldValue('status', value)}
+        />
+        <input
+          required
+          type="date"
+          value={formReturnType.values['dueDate'].toString()}
+          onChange={(event) => formReturnType.setFieldValue('dueDate', event.currentTarget.value)}
         />
         <TextInput
           error={formReturnType.errors['description'] && 'Invalid Description'}

@@ -13,15 +13,7 @@ export class ProjectService {
   ) { }
 
   async createUserProject(createProjectDto: CreateProjectDto) {
-    const { created_by, is_active, name } = createProjectDto;
-    Logger.log('-Project Name', name);
-    Logger.log('-is_active', is_active);
-    Logger.log('-created_by', created_by);
-    const { data, error } = await this.supabase.getClient().from('project').insert({
-      created_by,
-      is_active,
-      name,
-    }).single();
+    const { data, error } = await this.supabase.getClient().from('project').insert(createProjectDto).single();
 
     if (error) {
       throw error;
@@ -40,23 +32,6 @@ export class ProjectService {
 
     return data;
   }
-
-  /*
-   * async getProjectTasks(id: string): Promise<GetProjectResponseDto | any[]> {
-   *   Logger.log('-ProjectID', id);
-   *   const { data, error } = await this.supabase.getClient().from('task').select().eq('project_id', id);
-   */
-
-  /*
-   *   if (error) {
-   *     throw error;
-   *   }
-   */
-
-  /*
-   *   return data;
-   * }
-   */
 
   findOne(id: number) {
     return `This action returns a #${id} project`;

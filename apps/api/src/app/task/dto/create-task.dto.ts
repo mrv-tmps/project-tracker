@@ -1,9 +1,11 @@
 import { IsString } from 'class-validator';
-import TaskStatus from 'libs/enums/src/lib/Status';
 
 export class CreateTaskDto {
   @IsString()
   readonly name: string;
+
+  @IsString()
+  readonly due_date: string;
 
   @IsString()
   readonly description: string;
@@ -12,7 +14,7 @@ export class CreateTaskDto {
   readonly created_by: string;
 
   @IsString()
-  readonly status: TaskStatus;
+  readonly status: string;
 
   @IsString()
   readonly assignee_id: string;

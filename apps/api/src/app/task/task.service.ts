@@ -12,8 +12,16 @@ export class TaskService {
     private readonly supabase: Supabase,
   ) { }
 
-  create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task';
+  async createProjectTask(createTaskDto: CreateTaskDto) {
+    Logger.log('-Name:', createTaskDto.name);
+    Logger.log('-due_date:', createTaskDto.due_date);
+    const { data, error } = await this.supabase.getClient().from('task').insert(createTaskDto).single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
   }
 
   async getAllProjectTasks(id: string): Promise<GetTaskResponseDto | any[]> {

@@ -26,6 +26,9 @@ export class Task {
   name: string;
 
   @Column()
+  due_date: Date;
+
+  @Column()
   description: string;
 
   @Column()

@@ -10,8 +10,8 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) { }
 
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.taskService.create(createTaskDto);
+  createNewTask(@Body() createTaskDto: CreateTaskDto) {
+    return this.taskService.createProjectTask(createTaskDto);
   }
 
   @Get(':id')

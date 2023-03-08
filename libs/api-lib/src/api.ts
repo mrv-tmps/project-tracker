@@ -203,9 +203,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerCreate: async (body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        taskControllerCreateNewTask: async (body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
-            assertParamExists('taskControllerCreate', 'body', body)
+            assertParamExists('taskControllerCreateNewTask', 'body', body)
             const localVarPath = `/api/task`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -572,8 +572,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerCreate(body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerCreate(body, options);
+        async taskControllerCreateNewTask(body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerCreateNewTask(body, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -718,8 +718,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerCreate(body: object, options?: any): AxiosPromise<void> {
-            return localVarFp.taskControllerCreate(body, options).then((request) => request(axios, basePath));
+        taskControllerCreateNewTask(body: object, options?: any): AxiosPromise<void> {
+            return localVarFp.taskControllerCreateNewTask(body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -866,8 +866,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public taskControllerCreate(body: object, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).taskControllerCreate(body, options).then((request) => request(this.axios, this.basePath));
+    public taskControllerCreateNewTask(body: object, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).taskControllerCreateNewTask(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
