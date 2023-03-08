@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 import { Injectable, Logger } from '@nestjs/common';
 
 import { Supabase } from '../supabase';
@@ -15,6 +17,7 @@ export class TaskService {
   async createProjectTask(createTaskDto: CreateTaskDto) {
     Logger.log('-Name:', createTaskDto.name);
     Logger.log('-due_date:', createTaskDto.due_date);
+
     const { data, error } = await this.supabase.getClient().from('task').insert(createTaskDto).single();
 
     if (error) {

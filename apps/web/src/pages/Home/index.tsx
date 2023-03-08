@@ -25,6 +25,8 @@ function Home() {
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpened, setIsOpened] = useState(false);
 
+  const filteredProjects = userProjects?.filter((project) => project.created_by === userDetails?.uid);
+
   if (!userDetails) {
     navigate('/login');
   }
@@ -37,7 +39,7 @@ function Home() {
 
   async function getUserProjects() {
     setLoading(true);
-    const currentUserProjects = await fetchUserProjects(userDetails?.uid ?? '');
+    const currentUserProjects = await fetchUserProjects();
 
     if (currentUserProjects) {
       setUserProjects(currentUserProjects.data);
@@ -67,12 +69,12 @@ function Home() {
   const renderProjectText =
     <Text align="center" size={20} weight={400}>
       {userProjects
-        ? `You currently have ${userProjects.length} projects.`
+        ? `You currently have ${filteredProjects?.length} projects.`
         : 'You have no projects yet. Create one now!'
       }
     </Text>;
 
-  const renderProjectList = userProjects?.map(({
+  const renderProjectList = filteredProjects?.map(({
     id,
     name,
     is_active,
@@ -101,6 +103,8 @@ function Home() {
   });
 
   const handleSaveProject = async () => {
+    setLoading(true);
+
     try {
       const project = await createNewProject({
         created_by: formReturnType.values.id,
@@ -128,6 +132,8 @@ function Home() {
         title: 'Error',
       });
     }
+
+    setLoading(false);
   };
 
   const renderModal = (

@@ -4,6 +4,6 @@ export interface Project {
   created_by: string,
   id: string,
   name: string,
-  tasks?: Task[],
+  task: Task[],
   is_active: boolean,
 }

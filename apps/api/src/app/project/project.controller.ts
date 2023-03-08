@@ -15,9 +15,14 @@ export class ProjectController {
     return this.projectService.createUserProject(createProjectDto);
   }
 
+  @Get()
+  getAllProjects() {
+    return this.projectService.getAllUserProjects();
+  }
+
   @Get(':id')
-  getProjectsById(@Param('id') id: string): Promise<GetProjectResponseDto | any[]> {
-    return this.projectService.getAllUserProjects(id);
+  getProject(@Param('id') id: string) {
+    return this.projectService.findOne(id);
   }
 
   @Patch(':id')

@@ -1,4 +1,3 @@
-import TaskStatus from 'libs/enums/src/lib/Status';
 import {
   Column,
   CreateDateColumn,
@@ -32,7 +31,7 @@ export class Task {
   description: string;
 
   @Column()
-  status: TaskStatus;
+  status: string;
 
   @Column()
   assignee_id: string;

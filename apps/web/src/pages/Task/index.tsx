@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import CustomLoader from 'components/CustomLoader';
-import { fetchTask } from 'services/TaskService';
 
 import { Task } from 'types/Task';
 
@@ -20,10 +19,10 @@ function TaskPage() {
     async function getProjectTask() {
       setLoading(true);
 
-      const currentTask = params['taskId'] && await fetchTask(params['taskId']);
+      const currentTask = params['taskId'];
 
       if (currentTask) {
-        setTask(currentTask);
+        // setTask(currentTask);
       }
 
       setLoading(false);

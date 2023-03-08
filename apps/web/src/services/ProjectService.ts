@@ -23,9 +23,25 @@ export async function createNewProject(createProjectDto: CreateProjectDto) {
   }
 }
 
-export async function fetchUserProjects(userId: string) {
+export async function fetchUserProjects() {
   try {
-    const data = await projectApi.projectControllerGetProjectsById(userId);
+    const data = await projectApi.projectControllerGetAllProjects();
+
+    return data;
+  } catch (error) {
+    showNotification({
+      color: 'red',
+      message: 'An error was encountered while getting the user projects. Please refresh the page.',
+      title: 'Error',
+    });
+
+    return null;
+  }
+}
+
+export async function fetchProject(projectId: string) {
+  try {
+    const data = await projectApi.projectControllerGetProject(projectId);
 
     return data;
   } catch (error) {

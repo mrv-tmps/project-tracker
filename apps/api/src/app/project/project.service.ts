@@ -22,9 +22,8 @@ export class ProjectService {
     return data;
   }
 
-  async getAllUserProjects(id: string): Promise<GetProjectResponseDto | any[]> {
-    Logger.log('-UserID', id);
-    const { data, error } = await this.supabase.getClient().from('project').select().eq('created_by', id);
+  async getAllUserProjects() {
+    const { data, error } = await this.supabase.getClient().from('project').select();
 
     if (error) {
       throw error;
@@ -33,8 +32,15 @@ export class ProjectService {
     return data;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} project`;
+  async findOne(id: string) {
+    Logger.log('-ProjectID', id);
+    const { data, error } = await this.supabase.getClient().from('project').select('*, task(*)').eq('id', id);
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
   }
 
   update(id: number, updateProjectDto: UpdateProjectDto) {

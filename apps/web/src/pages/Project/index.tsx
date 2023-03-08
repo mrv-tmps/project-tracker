@@ -3,7 +3,6 @@ import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck, IconChevronDown, IconX } from '@tabler/icons';
 import { useState, useEffect } from 'react';
-import DatePicker from 'react-date-picker';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import CustomLoader from 'components/CustomLoader';
@@ -12,9 +11,10 @@ import { useAuth } from 'contexts/AuthProvider';
 import { DateFormatEnums } from 'enums/DateFormat';
 import TaskStatus from 'enums/TaskStatus';
 
-import { createNewTask, fetchTasks } from 'services/TaskService';
+import { fetchProject } from 'services/ProjectService';
+import { createNewTask } from 'services/TaskService';
 
-import { Task } from 'types/Task';
+import { Project } from 'types/Project';
 import { formatDate } from 'utils/Date';
 
 import * as S from '../styles';
@@ -22,28 +22,32 @@ import * as S from '../styles';
 function ProjectPage() {
   const params = useParams();
   const { userDetails } = useAuth();
-  const [tasks, setTasks] = useState<Task[] | void>();
+  const [project, setProjectData] = useState<Project[] | void>();
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpened, setIsOpened] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (params['projectId']) {
-      getProjectTasks();
+      getProject(params['projectId']);
     }
   }, [params]);
 
-  async function getProjectTasks() {
+  async function getProject(id: string) {
     setLoading(true);
 
-    const currentTasks = params['projectId'] && await fetchTasks(params['projectId']);
+    const currentTasks = await fetchProject(id);
 
     if (currentTasks) {
-      setTasks(currentTasks.data);
+      setProjectData(currentTasks.data);
     }
-
-    setLoading(false);
   }
+
+  useEffect(() => {
+    if (project) {
+      setLoading(false);
+    }
+  }, [project]);
 
   function handleBack() {
     navigate('/');
@@ -83,6 +87,8 @@ function ProjectPage() {
   };
 
   const handleSaveTask = async () => {
+    setLoading(true);
+
     try {
       const task = await createNewTask({
         assignee_id: formReturnType.values.assigneeId,
@@ -94,15 +100,15 @@ function ProjectPage() {
         status: formReturnType.values.status,
       });
 
-      if (task) {
+      if (task && params['projectId']) {
         showNotification({
           color: 'teal',
           icon: <IconCheck />,
-          message: 'You have successfully created a new project.',
+          message: 'You have successfully created a new task.',
           title: 'Success',
         });
 
-        getProjectTasks();
+        getProject(params['projectId']);
         formReturnType.reset();
         toggleModalDisplay();
       }
@@ -110,49 +116,48 @@ function ProjectPage() {
       showNotification({
         color: 'red',
         icon: <IconX />,
-        message: 'You have failed to create a new project.',
+        message: 'You have failed to create a new task.',
         title: 'Error',
       });
     }
+
+    setLoading(false);
   };
 
   const renderLoading = loading && <CustomLoader />;
 
-  const renderTaskText =
-    <Text size={20} weight={400}>
-      {tasks
-        ? `You currently have ${tasks.length} task/s in this project.`
-        : 'You have no tasks yet. Create one now!'
-      }
-    </Text>;
+  const renderTaskText = <Text size={20} weight={400}>
+    {project?.at(0)?.task
+      ? `You currently have ${project?.at(0)?.task.length} task/s in this project.`
+      : 'You have no tasks yet. Create one now!'
+    }
+  </Text>;
 
-  const renderTaskList = tasks?.map((task) =>
+  const renderTaskList = project?.at(0)?.task?.map((projectTask) =>
     <Button
-      key={task?.id}
+      key={projectTask?.id}
       fullWidth
       color="dark"
       size={'lg'}
       variant="outline"
-      onClick={() => handleNavigateToTask(task?.id)}
+      onClick={() => handleNavigateToTask(projectTask?.id)}
     >
       <S.TaskButtonTextWrapper>
         <Group position="left">
-          <Text size={'sm'}>{task?.name}</Text>
+          <Text size={'sm'}>{projectTask?.name}</Text>
         </Group>
         <Group position="right" spacing={105}>
-          <Text size={'sm'}>{task?.assignee_id}</Text>
-          {getDueDate(task?.due_date)}
-          <Text size={'sm'}>{task?.status}</Text>
+          <Text size={'sm'}>{projectTask?.assignee_id}</Text>
+          {getDueDate(projectTask?.due_date)}
+          <Text size={'sm'}>{projectTask?.status}</Text>
         </Group>
       </S.TaskButtonTextWrapper>
     </Button>
   );
 
-  const createNewTaskForm = <form onSubmit={formReturnType.onSubmit(handleSaveTask)}>
-    <Button size={'md'} onClick={toggleModalDisplay}>
-      Add new ticket
-    </Button>
-  </form>;
+  const createNewTaskForm = <Button size={'md'} onClick={toggleModalDisplay}>
+    Add new ticket
+  </Button>;
 
   const renderModal = (
     <CustomModal
@@ -225,7 +230,7 @@ function ProjectPage() {
       </Group>
       <Group align="stretch" my={80} position="center">
         <Stack align="stretch">
-          <Text size={36} weight={800}>{'LibMGT'}</Text>
+          <Text size={36} weight={800}>{project?.at(0)?.name}</Text>
           {renderTaskText}
           <S.TaskColumn>
             {renderTaskList}
