@@ -66,13 +66,8 @@ function Home() {
 
   const renderLoading = loading && <CustomLoader />;
 
-  const renderProjectText =
-    <Text align="center" size={20} weight={400}>
-      {userProjects
-        ? `You currently have ${filteredProjects?.length} projects.`
-        : 'You have no projects yet. Create one now!'
-      }
-    </Text>;
+  const projectText = userProjects ? `You currently have ${filteredProjects?.length} projects.`
+    : 'You have no projects yet. Create one now!';
 
   const renderProjectList = filteredProjects?.map(({
     id,
@@ -173,7 +168,7 @@ function Home() {
       <Group align="stretch" my={80} position="center">
         <Stack align="stretch">
           <Text align="center" size={36} weight={800}>Projects</Text>
-          {renderProjectText}
+          <Text align="center" size={20} weight={400}>{projectText}</Text>
           <S.Column>
             {renderProjectList}
             <Button size={'md'} onClick={toggleModalDisplay}>

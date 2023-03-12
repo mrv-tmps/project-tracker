@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import CustomLoader from 'components/CustomLoader';
 import CustomModal from 'components/CustomModal';
+import DatePicker from 'components/DatePicker';
 import { useAuth } from 'contexts/AuthProvider';
 import { DateFormatEnums } from 'enums/DateFormat';
 import TaskStatus from 'enums/TaskStatus';
@@ -126,12 +127,8 @@ function ProjectPage() {
 
   const renderLoading = loading && <CustomLoader />;
 
-  const renderTaskText = <Text size={20} weight={400}>
-    {project?.at(0)?.task
-      ? `You currently have ${project?.at(0)?.task.length} task/s in this project.`
-      : 'You have no tasks yet. Create one now!'
-    }
-  </Text>;
+  const taskText = project?.at(0)?.task ? `You currently have ${project?.at(0)?.task.length} task/s in this project.`
+    : 'You have no tasks yet. Create one now!';
 
   const renderTaskList = project?.at(0)?.task?.map((projectTask) =>
     <Button
@@ -200,9 +197,8 @@ function ProjectPage() {
           value={formReturnType.values['status']}
           onChange={(value) => value && formReturnType.setFieldValue('status', value)}
         />
-        <input
-          required
-          type="date"
+        <DatePicker
+          label="Deadline"
           value={formReturnType.values['dueDate'].toString()}
           onChange={(event) => formReturnType.setFieldValue('dueDate', event.currentTarget.value)}
         />
@@ -221,6 +217,21 @@ function ProjectPage() {
     </CustomModal>
   );
 
+  const renderTaskPage = !loading && (
+    <Group align="stretch" my={80} position="center">
+      <Stack align="stretch">
+        <Text size={36} weight={800}>{project?.at(0)?.name}</Text>
+        <Text size={20} weight={400}>{taskText}</Text>
+        <S.TaskColumn>
+          {renderTaskList}
+          <Group position="right">
+            {createNewTaskForm}
+          </Group>
+        </S.TaskColumn>
+      </Stack>
+    </Group>
+  );
+
   return (
     <S.PageContainer>
       {renderModal}
@@ -228,18 +239,7 @@ function ProjectPage() {
       <Group position="right">
         <Button color="gray" m={10} onClick={handleBack}>Back</Button>
       </Group>
-      <Group align="stretch" my={80} position="center">
-        <Stack align="stretch">
-          <Text size={36} weight={800}>{project?.at(0)?.name}</Text>
-          {renderTaskText}
-          <S.TaskColumn>
-            {renderTaskList}
-            <Group position="right">
-              {createNewTaskForm}
-            </Group>
-          </S.TaskColumn>
-        </Stack>
-      </Group>
+      {renderTaskPage}
     </S.PageContainer>
   );
 }
