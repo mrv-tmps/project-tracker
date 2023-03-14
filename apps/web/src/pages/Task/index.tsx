@@ -11,30 +11,36 @@ import * as S from '../styles';
 
 function TaskPage() {
   const params = useParams();
-  const [task, setTask] = useState<Task>();
+  const [task, setTask] = useState<Task | void>();
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function getProjectTask() {
-      setLoading(true);
+    if (params['taskId']) {
+      getProjectTask(params['taskId']);
+    }
+  }, [params]);
 
-      const currentTask = params['taskId'];
-
-      if (currentTask) {
-        // setTask(currentTask);
-      }
-
+  useEffect(() => {
+    if (task) {
       setLoading(false);
     }
+  }, [task]);
 
-    if (params['taskId']) {
-      getProjectTask();
+  async function getProjectTask(id: string) {
+    setLoading(true);
+
+    const currentTask = id; //create hook useTaskContext
+
+    if (currentTask) {
+      // setTask(currentTask.data);
     }
-  }, [params, task]);
+
+    setLoading(false); // remove this if it works already
+  }
 
   function handleBack() {
-    navigate('/');
+    navigate(-1);
   }
 
   const renderLoading = loading && <CustomLoader />;
@@ -81,7 +87,7 @@ function TaskPage() {
             </SimpleGrid>
             <Group position="apart">
               <Title size={24} weight={500}>To Dos</Title>
-              <Button>Create new task</Button>
+              <Button>Add</Button>
             </Group>
             <Paper withBorder px={25}>
               <p>Setup migrations</p>
