@@ -38,8 +38,14 @@ export class TaskService {
     return data;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async getAllTasks(): Promise<GetTaskResponseDto | any[]> {
+    const { data, error } = await this.supabase.getClient().from('task').select();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
   }
 
   update(id: number, updateTaskDto: UpdateTaskDto) {

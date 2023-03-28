@@ -15,7 +15,7 @@ export async function createNewTask(createTaskDto: CreateTaskDto) {
   } catch (error) {
     showNotification({
       color: 'red',
-      message: 'An error was encountered while getting the project tasks. Please refresh the page.',
+      message: 'An error was encountered while creating the task. Please refresh the page.',
       title: 'Error',
     });
 
@@ -31,7 +31,23 @@ export async function fetchTasks(projectId: string) {
   } catch (error) {
     showNotification({
       color: 'red',
-      message: 'An error was encountered while getting the user projects. Please refresh the page.',
+      message: 'An error was encountered while getting the project tasks. Please refresh the page.',
+      title: 'Error',
+    });
+
+    return null;
+  }
+}
+
+export async function fetchAllTasks() {
+  try {
+    const data = await taskApi.taskControllerGetAllTasks();
+
+    return data;
+  } catch (error) {
+    showNotification({
+      color: 'red',
+      message: 'An error was encountered while getting all tasks. Please refresh the page.',
       title: 'Error',
     });
 

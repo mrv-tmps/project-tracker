@@ -14,6 +14,11 @@ export class TaskController {
     return this.taskService.createProjectTask(createTaskDto);
   }
 
+  @Get()
+  getAllTasks(): Promise<GetTaskResponseDto | any[]> {
+    return this.taskService.getAllTasks();
+  }
+
   @Get(':id')
   getTasksByProjectId(@Param('id') id: string): Promise<GetTaskResponseDto | any[]> {
     return this.taskService.getAllProjectTasks(id);

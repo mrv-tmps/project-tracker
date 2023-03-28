@@ -1,4 +1,4 @@
-import { Button, Image, Group, Paper, SimpleGrid, Stack, Text, Title, Grid, Container } from '@mantine/core';
+import { Button, Image, Group, Paper, SimpleGrid, Stack, Text, Title, Grid } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -6,38 +6,42 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CustomLoader from 'components/CustomLoader';
 
 import TaskStatus from 'enums/TaskStatus';
+import { fetchAllTasks } from 'services/TaskService';
 import { Task } from 'types/Task';
 
 import * as S from '../styles';
 
 function TaskPage() {
   const params = useParams();
+  const [fetchedTasks, setFetchedTasks] = useState<Task[] | void>();
   const [task, setTask] = useState<Task | void>();
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (params['taskId']) {
-      getProjectTask(params['taskId']);
+    if (fetchedTasks && params['taskId']) {
+      getCurrentTask(fetchedTasks, params['taskId']);
     }
-  }, [params]);
 
-  useEffect(() => {
-    if (task) {
-      setLoading(false);
+    if (!task) {
+      getAllTasks();
     }
-  }, [task]);
+  }, [fetchedTasks, params]);
 
-  async function getProjectTask(id: string) {
+  function getCurrentTask(fetchedTasks: Task[], id: string) {
+    setTask(fetchedTasks.find((task) => (task.id === id)));
+  }
+
+  async function getAllTasks() {
     setLoading(true);
 
-    const currentTask = id; //create hook useTaskContext
+    const currentTask = await fetchAllTasks();
 
     if (currentTask) {
-      // setTask(currentTask.data);
+      setFetchedTasks(currentTask.data);
     }
 
-    setLoading(false); // remove this if it works already
+    setLoading(false);
   }
 
   function handleBack() {
@@ -60,10 +64,10 @@ function TaskPage() {
 
   return (
     <S.PageContainer>
-      <Paper p="xl">
+      <Paper m="lg">
         {renderLoading}
         <Group position="right">
-          <Button color="gray" m={10} onClick={handleBack}>Back</Button>
+          <Button color="gray" onClick={handleBack}>Back</Button>
         </Group>
         <Grid>
           <Grid.Col md={8}>
@@ -106,7 +110,7 @@ function TaskPage() {
               </Paper>
               <Title size={24} weight={500}>Assigned</Title>
               <S.AssignedContainer>
-                <p>Merv Tampus</p>
+                <p>{task?.assignee_id}</p>
               </S.AssignedContainer>
             </Stack>
           </Grid.Col>
@@ -117,15 +121,14 @@ function TaskPage() {
                 <Button>Add</Button>
               </Group>
               {renderToDo}
-              {renderToDo}
               <Group position="apart">
                 <Title size={24} weight={500}>Comments</Title>
                 <Button>Add new comment</Button>
               </Group>
-              <Paper withBorder px={25} py={15}>
+              <Paper withBorder mb="md" px={25} py={15}>
                 <Group position="apart">
                   <Text>All details are subject to change</Text>
-                  <Text color="blue">Merv Tampus</Text>
+                  <Text color="blue">{task?.assignee_id}</Text>
                 </Group>
               </Paper>
             </Stack>
