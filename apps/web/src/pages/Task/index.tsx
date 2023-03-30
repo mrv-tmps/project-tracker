@@ -11,11 +11,14 @@ import { Task } from 'types/Task';
 
 import * as S from '../styles';
 
+import ToDoModal from './ToDoModal';
+
 function TaskPage() {
   const params = useParams();
   const [fetchedTasks, setFetchedTasks] = useState<Task[] | void>();
   const [task, setTask] = useState<Task | void>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [isOpened, setIsOpened] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +30,10 @@ function TaskPage() {
       getAllTasks();
     }
   }, [fetchedTasks, params]);
+
+  const toggleToDoModalDisplay = () => {
+    setIsOpened(!isOpened);
+  };
 
   function getCurrentTask(fetchedTasks: Task[], id: string) {
     setTask(fetchedTasks.find((task) => (task.id === id)));
@@ -65,6 +72,7 @@ function TaskPage() {
   return (
     <S.PageContainer>
       <Paper m="lg">
+        <ToDoModal isOpened={isOpened} taskId={task?.id ?? ''} onClose={toggleToDoModalDisplay} />
         {renderLoading}
         <Group position="right">
           <Button color="gray" onClick={handleBack}>Back</Button>
@@ -118,7 +126,7 @@ function TaskPage() {
             <Stack>
               <Group position="apart">
                 <Title size={24} weight={500}>To Dos</Title>
-                <Button>Add</Button>
+                <Button onClick={toggleToDoModalDisplay}>Add</Button>
               </Group>
               {renderToDo}
               <Group position="apart">
