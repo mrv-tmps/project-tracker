@@ -11,6 +11,7 @@ import { Task } from 'types/Task';
 
 import * as S from '../styles';
 
+import CommentModal from './CommentModal';
 import ToDoModal from './ToDoModal';
 
 function TaskPage() {
@@ -19,6 +20,7 @@ function TaskPage() {
   const [task, setTask] = useState<Task | void>();
   const [loading, setLoading] = useState<boolean>(false);
   const [isOpened, setIsOpened] = useState(false);
+  const [commentIsOpened, setCommentIsOpened] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,6 +35,10 @@ function TaskPage() {
 
   const toggleToDoModalDisplay = () => {
     setIsOpened(!isOpened);
+  };
+
+  const toggleCommentModalDisplay = () => {
+    setCommentIsOpened(!commentIsOpened);
   };
 
   function getCurrentTask(fetchedTasks: Task[], id: string) {
@@ -73,6 +79,11 @@ function TaskPage() {
     <S.PageContainer>
       <Paper m="lg">
         <ToDoModal isOpened={isOpened} taskId={task?.id ?? ''} onClose={toggleToDoModalDisplay} />
+        <CommentModal
+          isOpened={commentIsOpened}
+          taskId={task?.id ?? ''}
+          onClose={toggleCommentModalDisplay}
+        />
         {renderLoading}
         <Group position="right">
           <Button color="gray" onClick={handleBack}>Back</Button>
@@ -131,7 +142,7 @@ function TaskPage() {
               {renderToDo}
               <Group position="apart">
                 <Title size={24} weight={500}>Comments</Title>
-                <Button>Add new comment</Button>
+                <Button onClick={toggleCommentModalDisplay}>Add new comment</Button>
               </Group>
               <Paper withBorder mb="md" px={25} py={15}>
                 <Group position="apart">
