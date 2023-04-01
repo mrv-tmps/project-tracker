@@ -1,4 +1,4 @@
-import { Button, Image, Group, Paper, SimpleGrid, Stack, Text, Title, Grid } from '@mantine/core';
+import { Button, Image, Group, Paper, SimpleGrid, Stack, Text, Title, Grid, Select } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -115,18 +115,16 @@ function TaskPage() {
           <Grid.Col md={4}>
             <Stack>
               <Title mt={15} size={24} weight={500}>Status</Title>
-              <Paper withBorder mt={5} pl={25} pr={10}>
-                <Group position="apart">
-                  <p>{task?.status ?? TaskStatus.IN_PROGRESS}</p>
-                  <Button size="sm" variant="white">
-                    <IconArrowRight
-                      color={'#228BE6'}
-                      size={24}
-                      strokeWidth={2}
-                    />
-                  </Button>
-                </Group>
-              </Paper>
+              <Select
+                data={[
+                  { label: TaskStatus.TO_DO, value: TaskStatus.TO_DO },
+                  { label: TaskStatus.IN_PROGRESS, value: TaskStatus.IN_PROGRESS },
+                  { label: TaskStatus.DONE, value: TaskStatus.DONE },
+                ]}
+                placeholder={task?.status}
+                size="lg"
+                value={task?.status}
+              />
               <Title size={24} weight={500}>Assigned</Title>
               <S.AssignedContainer>
                 <p>{task?.assignee_id}</p>
