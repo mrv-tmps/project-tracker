@@ -1,6 +1,6 @@
 # Project Tracker
 
-This project was generated using Nx.
+This web application is a simplified project management tool used for common management tasks for kinds of projects.
 
 # Setup
 Requirements
