@@ -9,9 +9,10 @@ import { AppService } from './app.service';
 import { Project } from './project/entities/project.entity';
 import { ProjectModule } from './project/project.module';
 import { SupabaseModule } from './supabase';
+import { TaskModule } from './task/task.module';
+import { ToDoModule } from './todo/todo.module';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
-import { TaskModule } from './task/task.module';
 
 @Module({
   controllers: [AppController],
@@ -35,6 +36,7 @@ import { TaskModule } from './task/task.module';
     SupabaseModule,
     ProjectModule,
     TaskModule,
+    ToDoModule,
   ],
   providers: [AppService],
 })

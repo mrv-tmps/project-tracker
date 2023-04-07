@@ -1,5 +1,4 @@
 import { Button, Image, Group, Paper, SimpleGrid, Stack, Text, Title, Grid, Select } from '@mantine/core';
-import { IconArrowRight } from '@tabler/icons';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -17,8 +16,9 @@ import ToDoModal from './ToDoModal';
 function TaskPage() {
   const params = useParams();
   const [fetchedTasks, setFetchedTasks] = useState<Task[] | void>();
-  const [task, setTask] = useState<Task | void>();
+  const [task, setTask] = useState<Task | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [isUpdated, setIsUpdated] = useState<boolean>(false);
   const [isOpened, setIsOpened] = useState(false);
   const [commentIsOpened, setCommentIsOpened] = useState(false);
   const navigate = useNavigate();
@@ -31,7 +31,11 @@ function TaskPage() {
     if (!task) {
       getAllTasks();
     }
-  }, [fetchedTasks, params]);
+  }, [fetchedTasks, params, isUpdated]);
+
+  const toggleIsUpdated = () => {
+    setIsUpdated(!isUpdated);
+  };
 
   const toggleToDoModalDisplay = () => {
     setIsOpened(!isOpened);
@@ -75,15 +79,27 @@ function TaskPage() {
     <p>Setup migrations</p>
   </Paper>;
 
+  const renderToDoModal = task && (
+    <ToDoModal
+      isOpened={isOpened}
+      taskId={task.id}
+      onClose={toggleToDoModalDisplay}
+      onUpdate={toggleIsUpdated}
+    />
+  );
+  const renderCommentModal = task && (
+    <CommentModal
+      isOpened={commentIsOpened}
+      taskId={task.id}
+      onClose={toggleCommentModalDisplay}
+    />
+  );
+
   return (
     <S.PageContainer>
       <Paper m="lg">
-        <ToDoModal isOpened={isOpened} taskId={task?.id ?? ''} onClose={toggleToDoModalDisplay} />
-        <CommentModal
-          isOpened={commentIsOpened}
-          taskId={task?.id ?? ''}
-          onClose={toggleCommentModalDisplay}
-        />
+        {renderToDoModal}
+        {renderCommentModal}
         {renderLoading}
         <Group position="right">
           <Button color="gray" onClick={handleBack}>Back</Button>

@@ -29,14 +29,6 @@ const AuthProvider = (props: Props) => {
           email: firebaseUserDetails.email,
           uid: firebaseUserDetails.uid,
         });
-        /*
-         * const userApi = ApiClient.use(UserApi);
-         * try {
-         *   const { data } = await userApi.userControllerGetProfileDetailsByFirebaseId(firebaseUserDetails.uid);
-         * } catch (error) {
-         *   alert('An error occurred while getting your account details. Please reload the page to try again.');
-         * }
-         */
       } else {
         setUserDetails(null);
       }

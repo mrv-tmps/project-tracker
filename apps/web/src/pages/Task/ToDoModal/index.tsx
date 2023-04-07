@@ -5,16 +5,19 @@ import { IconCheck, IconX } from '@tabler/icons';
 
 import React, { useState } from 'react';
 
+import CustomLoader from 'components/CustomLoader';
 import CustomModal from 'components/CustomModal';
+import { createNewToDo } from 'services/ToDoService';
 
 type Props = {
   taskId: string;
   isOpened: boolean;
   onClose: () => void;
+  onUpdate: () => void;
 }
 
 function ToDoModal(props: Props) {
-  const { isOpened, onClose, taskId } = props;
+  const { isOpened, onClose, onUpdate, taskId } = props;
   const [loading, setLoading] = useState<boolean>(false);
 
   const formReturnType = useForm({
@@ -25,7 +28,7 @@ function ToDoModal(props: Props) {
     },
 
     validate: {
-      description: (val) => (val.length < 1 ? 'Password should include at least 1 characters' : null),
+      description: (val) => (val.length < 1 ? 'Description should include at least 1 characters' : null),
     },
   });
 
@@ -33,39 +36,37 @@ function ToDoModal(props: Props) {
     setLoading(true);
 
     try {
-      const project = true; // await createNewProject({
-      /*
-       * created_by: formReturnType.values.id,
-       * is_active: true,
-       * name: formReturnType.values.name,
-       * });
-       */
+      const toDo = await createNewToDo({
+        description: formReturnType.values.description,
+        is_done: false,
+        task_id: formReturnType.values.taskId,
+      });
 
-      if (project) {
+      if (toDo) {
         showNotification({
           color: 'teal',
           icon: <IconCheck />,
-          message: 'You have successfully created a new project.',
+          message: 'You have successfully created a to do task.',
           title: 'Success',
         });
 
-        /*
-         * getTaskToDos();
-         * formReturnType.reset();
-         * toggleToDoModalDisplay();
-         */
+        onUpdate();
+        formReturnType.reset();
+        onClose();
       }
     } catch (err) {
       showNotification({
         color: 'red',
         icon: <IconX />,
-        message: 'You have failed to create a new project.',
+        message: 'You have failed to create a to do task.',
         title: 'Error',
       });
     }
 
     setLoading(false);
   };
+
+  const renderLoading = loading && <CustomLoader />;
 
   return (
     <CustomModal
@@ -78,6 +79,7 @@ function ToDoModal(props: Props) {
       onClose={onClose}
     >
       <form onSubmit={formReturnType.onSubmit(handleSaveToDo)}>
+        {renderLoading}
         <TextInput
           required
           error={formReturnType.errors['description'] && 'Invalid description'}
