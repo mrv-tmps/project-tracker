@@ -6,7 +6,9 @@ import CustomLoader from 'components/CustomLoader';
 
 import TaskStatus from 'enums/TaskStatus';
 import { fetchAllTasks } from 'services/TaskService';
+import { fetchToDos } from 'services/ToDoService';
 import { Task } from 'types/Task';
+import { ToDo } from 'types/ToDo';
 
 import * as S from '../styles';
 
@@ -16,6 +18,7 @@ import ToDoModal from './ToDoModal';
 function TaskPage() {
   const params = useParams();
   const [fetchedTasks, setFetchedTasks] = useState<Task[] | void>();
+  const [toDos, setToDos] = useState<ToDo[] | void>();
   const [task, setTask] = useState<Task | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
   const [isUpdated, setIsUpdated] = useState<boolean>(false);
@@ -26,6 +29,7 @@ function TaskPage() {
   useEffect(() => {
     if (fetchedTasks && params['taskId']) {
       getCurrentTask(fetchedTasks, params['taskId']);
+      getToDos(params['taskId']);
     }
 
     if (!task) {
@@ -61,6 +65,18 @@ function TaskPage() {
     setLoading(false);
   }
 
+  async function getToDos(id: string) {
+    setLoading(true);
+
+    const currentToDos = await fetchToDos(id);
+
+    if (currentToDos) {
+      setToDos(currentToDos.data);
+    }
+
+    setLoading(false);
+  }
+
   function handleBack() {
     navigate(-1);
   }
@@ -75,9 +91,15 @@ function TaskPage() {
     />
   </Paper>;
 
-  const renderToDo = <Paper withBorder px={25}>
-    <p>Setup migrations</p>
-  </Paper>;
+  const renderToDo = toDos && toDos.length > 0 ? toDos.map(({ id, description }) => (
+    <Paper key={id} withBorder px={25}>
+      <p>{description}</p>
+    </Paper>
+  )) : (
+    <Paper withBorder px={25}>
+      <p>No To Dos available</p>
+    </Paper>
+  );
 
   const renderToDoModal = task && (
     <ToDoModal
@@ -153,7 +175,9 @@ function TaskPage() {
                 <Title size={24} weight={500}>To Dos</Title>
                 <Button onClick={toggleToDoModalDisplay}>Add</Button>
               </Group>
-              {renderToDo}
+              <Stack>
+                {renderToDo}
+              </Stack>
               <Group position="apart">
                 <Title size={24} weight={500}>Comments</Title>
                 <Button onClick={toggleCommentModalDisplay}>Add new comment</Button>
