@@ -5,6 +5,7 @@ import { IconCheck, IconX } from '@tabler/icons';
 
 import React, { useState } from 'react';
 
+import CustomLoader from 'components/CustomLoader';
 import CustomModal from 'components/CustomModal';
 import { useAuth } from 'contexts/AuthProvider';
 
@@ -12,21 +13,23 @@ type Props = {
   taskId: string;
   isOpened: boolean;
   onClose: () => void;
+  onUpdate: () => void;
 }
 
 function CommentModal(props: Props) {
+  const { isOpened, onClose, onUpdate, taskId } = props;
   const { userDetails } = useAuth();
-  const { isOpened, onClose, taskId } = props;
   const [loading, setLoading] = useState<boolean>(false);
 
   const commentForm = useForm({
     initialValues: {
-      assignedId: userDetails?.displayName,
+      assignedId: userDetails?.displayName ?? '',
       comment: '',
       taskId: taskId,
     },
 
     validate: {
+      assignedId: (val) => (val.length < 1 ? 'Password should include at least 1 characters' : null),
       comment: (val) => (val.length < 1 ? 'Password should include at least 1 characters' : null),
     },
   });
@@ -34,40 +37,44 @@ function CommentModal(props: Props) {
   const handleSaveComment = async () => {
     setLoading(true);
 
-    try {
-      const project = true; // await createNewProject({
-      /*
-       * created_by: commentForm.values.id,
-       * is_active: true,
-       * name: commentForm.values.name,
-       * });
-       */
+    /*
+     * try {
+     *   const comment = await createNewComment({
+     *     assignedId: commentForm.values.assignedId,
+     *     comment: commentForm.values.comment,
+     *     task_id: commentForm.values.taskId,
+     *   });
+     */
 
-      if (project) {
-        showNotification({
-          color: 'teal',
-          icon: <IconCheck />,
-          message: 'You have successfully created a new project.',
-          title: 'Success',
-        });
+    /*
+     *   if (comment) {
+     *     showNotification({
+     *       color: 'teal',
+     *       icon: <IconCheck />,
+     *       message: 'You have successfully created a new comment.',
+     *       title: 'Success',
+     *     });
+     */
 
-        /*
-         * getTaskToDos();
-         * commentForm.reset();
-         * toggleCommentModalDisplay();
-         */
-      }
-    } catch (err) {
-      showNotification({
-        color: 'red',
-        icon: <IconX />,
-        message: 'You have failed to create a new project.',
-        title: 'Error',
-      });
-    }
+    /*
+     *     onUpdate();
+     *     commentForm.reset();
+     *     onClose();
+     *   }
+     * } catch (err) {
+     *   showNotification({
+     *     color: 'red',
+     *     icon: <IconX />,
+     *     message: 'You have failed to create a new comment.',
+     *     title: 'Error',
+     *   });
+     * }
+     */
 
     setLoading(false);
   };
+
+  const renderLoading = loading && <CustomLoader />;
 
   return (
     <CustomModal
@@ -80,6 +87,7 @@ function CommentModal(props: Props) {
       onClose={onClose}
     >
       <form onSubmit={commentForm.onSubmit(handleSaveComment)}>
+        {renderLoading}
         <TextInput
           required
           error={commentForm.errors['comment'] && 'Invalid comment'}
@@ -88,6 +96,15 @@ function CommentModal(props: Props) {
           placeholder="Have initialized project requirements"
           value={commentForm.values['comment']}
           onChange={(event) => commentForm.setFieldValue('comment', event.currentTarget.value)}
+        />
+        <TextInput
+          required
+          error={commentForm.errors['assignedId'] && 'Invalid assigned id'}
+          label="Commentator"
+          mb={5}
+          placeholder="Assigned User ID"
+          value={commentForm.values['assignedId'] ?? ' '}
+          onChange={(event) => commentForm.setFieldValue('assignedId', event.currentTarget.value)}
         />
         <Button fullWidth mt="xl" type="submit">
           {'Add Comment'}

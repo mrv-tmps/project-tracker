@@ -101,6 +101,25 @@ function TaskPage() {
     </Paper>
   );
 
+  const renderComments = <Paper withBorder px={25}>
+    <p>No comments available</p>
+  </Paper>;
+
+  /*
+   * comments && comments.length > 0 ? comments.map(({ assignee_id, id, comment }) => (
+   *   <Paper key={id} withBorder mb="md" px={25} py={15}>
+   *     <Group position="apart">
+   *       <Text>{comment}</Text>
+   *       <Text color="blue">{assignee_id}</Text>
+   *     </Group>
+   *   </Paper>
+   * )) : (
+   *   <Paper withBorder px={25}>
+   *     <p>No comments available</p>
+   *   </Paper>
+   * );
+   */
+
   const renderToDoModal = task && (
     <ToDoModal
       isOpened={isOpened}
@@ -114,6 +133,7 @@ function TaskPage() {
       isOpened={commentIsOpened}
       taskId={task.id}
       onClose={toggleCommentModalDisplay}
+      onUpdate={toggleIsUpdated}
     />
   );
 
@@ -175,19 +195,16 @@ function TaskPage() {
                 <Title size={24} weight={500}>To Dos</Title>
                 <Button onClick={toggleToDoModalDisplay}>Add</Button>
               </Group>
-              <Stack>
-                {renderToDo}
-              </Stack>
+              {renderToDo}
+            </Stack>
+          </Grid.Col>
+          <Grid.Col md={4}>
+            <Stack>
               <Group position="apart">
                 <Title size={24} weight={500}>Comments</Title>
-                <Button onClick={toggleCommentModalDisplay}>Add new comment</Button>
+                <Button onClick={toggleCommentModalDisplay}>Add comment</Button>
               </Group>
-              <Paper withBorder mb="md" px={25} py={15}>
-                <Group position="apart">
-                  <Text>All details are subject to change</Text>
-                  <Text color="blue">{task?.assignee_id}</Text>
-                </Group>
-              </Paper>
+              {renderComments}
             </Stack>
           </Grid.Col>
         </Grid>
