@@ -13,6 +13,7 @@ import { TaskModule } from './task/task.module';
 import { ToDoModule } from './todo/todo.module';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   controllers: [AppController],
@@ -37,6 +38,7 @@ import { UserModule } from './user/user.module';
     ProjectModule,
     TaskModule,
     ToDoModule,
+    CommentModule,
   ],
   providers: [AppService],
 })

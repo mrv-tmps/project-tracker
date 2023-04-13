@@ -5,8 +5,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CustomLoader from 'components/CustomLoader';
 
 import TaskStatus from 'enums/TaskStatus';
+import { fetchComments } from 'services/CommentService';
 import { fetchAllTasks } from 'services/TaskService';
 import { fetchToDos } from 'services/ToDoService';
+import { Comment } from 'types/Comment';
 import { Task } from 'types/Task';
 import { ToDo } from 'types/ToDo';
 
@@ -19,6 +21,7 @@ function TaskPage() {
   const params = useParams();
   const [fetchedTasks, setFetchedTasks] = useState<Task[] | void>();
   const [toDos, setToDos] = useState<ToDo[] | void>();
+  const [comments, setComments] = useState<Comment[] | void>();
   const [task, setTask] = useState<Task | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
   const [isUpdated, setIsUpdated] = useState<boolean>(false);
@@ -30,6 +33,7 @@ function TaskPage() {
     if (fetchedTasks && params['taskId']) {
       getCurrentTask(fetchedTasks, params['taskId']);
       getToDos(params['taskId']);
+      getComments(params['taskId']);
     }
 
     if (!task) {
@@ -77,6 +81,18 @@ function TaskPage() {
     setLoading(false);
   }
 
+  async function getComments(id: string) {
+    setLoading(true);
+
+    const currentComments = await fetchComments(id);
+
+    if (currentComments) {
+      setComments(currentComments.data);
+    }
+
+    setLoading(false);
+  }
+
   function handleBack() {
     navigate(-1);
   }
@@ -101,24 +117,18 @@ function TaskPage() {
     </Paper>
   );
 
-  const renderComments = <Paper withBorder px={25}>
-    <p>No comments available</p>
-  </Paper>;
-
-  /*
-   * comments && comments.length > 0 ? comments.map(({ assignee_id, id, comment }) => (
-   *   <Paper key={id} withBorder mb="md" px={25} py={15}>
-   *     <Group position="apart">
-   *       <Text>{comment}</Text>
-   *       <Text color="blue">{assignee_id}</Text>
-   *     </Group>
-   *   </Paper>
-   * )) : (
-   *   <Paper withBorder px={25}>
-   *     <p>No comments available</p>
-   *   </Paper>
-   * );
-   */
+  const renderComments = comments && comments.length > 0 ? comments.map(({ commenter_user_id, description, id }) => (
+    <Paper key={id} withBorder px={25} py={15}>
+      <Group position="apart">
+        <Text>{description}</Text>
+        <Text color="blue">{commenter_user_id}</Text>
+      </Group>
+    </Paper>
+  )) : (
+    <Paper withBorder px={25}>
+      <p>No comments available</p>
+    </Paper>
+  );
 
   const renderToDoModal = task && (
     <ToDoModal

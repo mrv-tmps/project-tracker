@@ -3,11 +3,12 @@ import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import CustomLoader from 'components/CustomLoader';
 import CustomModal from 'components/CustomModal';
 import { useAuth } from 'contexts/AuthProvider';
+import { createNewComment } from 'services/CommentService';
 
 type Props = {
   taskId: string;
@@ -20,59 +21,64 @@ function CommentModal(props: Props) {
   const { isOpened, onClose, onUpdate, taskId } = props;
   const { userDetails } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
+  const userHasDisplayName = userDetails?.displayName && userDetails?.displayName.length > 0;
 
   const commentForm = useForm({
     initialValues: {
-      assignedId: userDetails?.displayName ?? '',
       comment: '',
+      commenter: userHasDisplayName ? userDetails?.displayName : '',
       taskId: taskId,
     },
 
     validate: {
-      assignedId: (val) => (val.length < 1 ? 'Password should include at least 1 characters' : null),
       comment: (val) => (val.length < 1 ? 'Password should include at least 1 characters' : null),
+      commenter: (val: string) => (val.length < 1 ? 'Password should include at least 1 characters' : null),
     },
   });
 
   const handleSaveComment = async () => {
     setLoading(true);
 
-    /*
-     * try {
-     *   const comment = await createNewComment({
-     *     assignedId: commentForm.values.assignedId,
-     *     comment: commentForm.values.comment,
-     *     task_id: commentForm.values.taskId,
-     *   });
-     */
+    try {
+      const comment = await createNewComment({
+        commenter_user_id: commentForm.values.commenter ?? '',
+        description: commentForm.values.comment,
+        task_id: commentForm.values.taskId,
+      });
 
-    /*
-     *   if (comment) {
-     *     showNotification({
-     *       color: 'teal',
-     *       icon: <IconCheck />,
-     *       message: 'You have successfully created a new comment.',
-     *       title: 'Success',
-     *     });
-     */
+      if (comment) {
+        showNotification({
+          color: 'teal',
+          icon: <IconCheck />,
+          message: 'You have successfully created a new comment.',
+          title: 'Success',
+        });
 
-    /*
-     *     onUpdate();
-     *     commentForm.reset();
-     *     onClose();
-     *   }
-     * } catch (err) {
-     *   showNotification({
-     *     color: 'red',
-     *     icon: <IconX />,
-     *     message: 'You have failed to create a new comment.',
-     *     title: 'Error',
-     *   });
-     * }
-     */
+        onUpdate();
+        commentForm.reset();
+        onClose();
+      }
+    } catch (err) {
+      showNotification({
+        color: 'red',
+        icon: <IconX />,
+        message: 'You have failed to create a new comment.',
+        title: 'Error',
+      });
+    }
 
     setLoading(false);
   };
+
+  const renderCommenterInput = userHasDisplayName ?? <TextInput
+    required
+    error={commentForm.errors['commenter'] && 'Invalid commenter id'}
+    label="Commenter"
+    mb={5}
+    placeholder="Commenter Name"
+    value={commentForm.values['commenter'] ?? ''}
+    onChange={(event) => commentForm.setFieldValue('commenter', event.currentTarget.value)}
+  />;
 
   const renderLoading = loading && <CustomLoader />;
 
@@ -93,19 +99,11 @@ function CommentModal(props: Props) {
           error={commentForm.errors['comment'] && 'Invalid comment'}
           label="Comment"
           mb={5}
-          placeholder="Have initialized project requirements"
+          placeholder="Currently in progress with a button"
           value={commentForm.values['comment']}
           onChange={(event) => commentForm.setFieldValue('comment', event.currentTarget.value)}
         />
-        <TextInput
-          required
-          error={commentForm.errors['assignedId'] && 'Invalid assigned id'}
-          label="Commentator"
-          mb={5}
-          placeholder="Assigned User ID"
-          value={commentForm.values['assignedId'] ?? ' '}
-          onChange={(event) => commentForm.setFieldValue('assignedId', event.currentTarget.value)}
-        />
+        {renderCommenterInput}
         <Button fullWidth mt="xl" type="submit">
           {'Add Comment'}
         </Button>
